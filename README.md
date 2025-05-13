@@ -1,17 +1,42 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Habitual - Premium Habit Tracking App
+
+Habitual is a sophisticated habit tracking application designed to help users build and maintain positive habits through personalized onboarding, intuitive tracking, and AI-powered insights.
+
+## Features
+
+- **Premium Personalized Onboarding**: Create a personalized experience for new users
+- **Habit Management**: Add, track, and visualize habits with ease
+- **Consistency Heatmap**: View progress over time with a visual heatmap
+- **AI-Generated Advice**: Receive personalized insights for habit improvement
+- **Daily Motivation**: Get inspired with a daily motivational quote
+
+## Tech Stack
+
+- **Frontend**: Next.js 14 with React
+- **UI**: Tailwind CSS with premium animations (Framer Motion)
+- **Backend**: Firebase (Authentication, Firestore)
+- **State Management**: React Context API
+- **Animation**: Framer Motion
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18.x or later
+- npm or yarn
+- Firebase account
+
+### Installation
+
+1. Clone the repository
+2. Install dependencies
+3. Set up environment variables (copy `.env.example` to `.env.local`)
+4. Run the development server:
 
 ```bash
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.

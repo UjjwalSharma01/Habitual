@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
+import { useOnboarding } from '@/context/OnboardingContext';
 import AppLayout from '@/components/layout/AppLayout';
 import HabitList from '@/components/habits/HabitList';
 import QuoteCard from '@/components/common/QuoteCard';
@@ -12,6 +13,7 @@ import { db } from '@/lib/firebase/firebase';
 export default function Dashboard() {
   const router = useRouter();
   const { user, loading } = useAuth();
+  const { onboardingState, loadingOnboarding } = useOnboarding();
   const [habits, setHabits] = useState([]);
   const [loadingHabits, setLoadingHabits] = useState(true);
   const [error, setError] = useState('');
@@ -20,6 +22,12 @@ export default function Dashboard() {
     // Redirect if not logged in
     if (!loading && !user) {
       router.push('/auth/login');
+      return;
+    }
+    
+    // Redirect to onboarding if not completed
+    if (!loadingOnboarding && user && !onboardingState.completed) {
+      router.push('/onboarding');
       return;
     }
 

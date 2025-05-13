@@ -51,7 +51,7 @@ export default function Register() {
     try {
       setLoading(true);
       await signup(formData.email, formData.password, formData.name);
-      router.push('/dashboard');
+      router.push('/onboarding');
     } catch (error) {
       console.error('Registration error:', error);
       setError(error.message || 'Failed to register. Please try again.');
