@@ -64,7 +64,7 @@ export default function Register() {
     <AppLayout>
       <div className="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
-          <h2 className="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+          <h2 className="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-foreground">
             Create your account
           </h2>
         </div>
@@ -174,7 +174,7 @@ export default function Register() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="flex w-full justify-center rounded-md bg-blue-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                  className="flex w-full justify-center rounded-md bg-primary px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-primary/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
                 >
                   {loading ? 'Creating account...' : 'Sign up'}
                 </button>
@@ -182,9 +182,9 @@ export default function Register() {
             </form>
           </div>
 
-          <p className="mt-10 text-center text-sm text-gray-500">
+          <p className="mt-10 text-center text-sm text-muted-foreground">
             Already a member?{' '}
-            <Link href="/auth/login" className="font-semibold leading-6 text-blue-600 hover:text-blue-500">
+            <Link href="/auth/login" className="font-semibold leading-6 text-primary hover:text-primary/90">
               Sign in
             </Link>
           </p>

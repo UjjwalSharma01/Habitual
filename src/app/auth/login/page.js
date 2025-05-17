@@ -79,7 +79,7 @@ export default function Login() {
     <AppLayout>
       <div className="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
-          <h2 className="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+          <h2 className="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-foreground">
             {resetMode ? 'Reset Your Password' : 'Sign in to your account'}
           </h2>
         </div>
@@ -135,7 +135,12 @@ export default function Login() {
                       required
                       value={formData.password}
                       onChange={handleChange}
-                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                      className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                      style={{ 
+                        backgroundColor: 'var(--background)', 
+                        color: 'var(--foreground)',
+                        borderColor: 'var(--border)',
+                      }}
                     />
                   </div>
                 </div>
@@ -145,7 +150,7 @@ export default function Login() {
                     <button 
                       type="button" 
                       onClick={() => setResetMode(true)}
-                      className="font-semibold text-blue-600 hover:text-blue-500"
+                      className="font-semibold text-primary hover:text-primary/90"
                     >
                       Forgot password?
                     </button>
@@ -156,7 +161,7 @@ export default function Login() {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="flex w-full justify-center rounded-md bg-blue-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                    className="flex w-full justify-center rounded-md bg-primary px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-primary/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
                   >
                     {loading ? 'Signing in...' : 'Sign in'}
                   </button>
@@ -165,7 +170,7 @@ export default function Login() {
             ) : (
               <form className="space-y-6" onSubmit={handlePasswordReset}>
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
+                  <label htmlFor="email" className="block text-sm font-medium leading-6" style={{ color: 'var(--card-foreground)' }}>
                     Email address
                   </label>
                   <div className="mt-2">
@@ -177,7 +182,12 @@ export default function Login() {
                       required
                       value={formData.email}
                       onChange={handleChange}
-                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                      className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                      style={{ 
+                        backgroundColor: 'var(--background)', 
+                        color: 'var(--foreground)',
+                        borderColor: 'var(--border)',
+                      }}
                     />
                   </div>
                 </div>
@@ -186,14 +196,14 @@ export default function Login() {
                   <button
                     type="button"
                     onClick={() => setResetMode(false)}
-                    className="flex w-full justify-center rounded-md bg-gray-200 px-3 py-1.5 text-sm font-semibold leading-6 text-gray-900 shadow-sm hover:bg-gray-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
+                    className="flex w-full justify-center rounded-md bg-secondary px-3 py-1.5 text-sm font-semibold leading-6 text-secondary-foreground shadow-sm hover:bg-secondary/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary"
                   >
                     Back to login
                   </button>
                   <button
                     type="submit"
                     disabled={loading}
-                    className="flex w-full justify-center rounded-md bg-blue-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                    className="flex w-full justify-center rounded-md bg-primary px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-primary/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
                   >
                     {loading ? 'Sending...' : 'Reset Password'}
                   </button>
@@ -202,9 +212,9 @@ export default function Login() {
             )}
           </div>
 
-          <p className="mt-10 text-center text-sm text-gray-500">
+          <p className="mt-10 text-center text-sm text-muted-foreground">
             Not a member?{' '}
-            <Link href="/auth/register" className="font-semibold leading-6 text-blue-600 hover:text-blue-500">
+            <Link href="/auth/register" className="font-semibold leading-6 text-primary hover:text-primary/90">
               Sign up now
             </Link>
           </p>
