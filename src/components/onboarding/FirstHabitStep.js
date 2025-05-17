@@ -118,7 +118,7 @@ export default function FirstHabitStep() {
               Habit Created Successfully! ✨
             </h2>
             <p className="text-xl text-gray-600 max-w-md mx-auto">
-              You've added <span className="font-semibold">{createdHabit.name}</span> to your habits.
+              You&apos;ve added <span className="font-semibold">{createdHabit.name}</span> to your habits.
             </p>
           </div>
           

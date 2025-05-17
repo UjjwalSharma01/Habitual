@@ -68,7 +68,7 @@ export default function OnboardingSuccess() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5, duration: 0.5 }}
               >
-                You're all set to start your habit-building journey.
+                You&apos;re all set to start your habit-building journey.
               </motion.p>
             </div>
             

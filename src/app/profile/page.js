@@ -57,16 +57,16 @@ export default function Profile() {
 
   return (
     <AppLayout>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="md:flex md:items-center md:justify-between mb-8">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-8">
+        <div className="md:flex md:items-center md:justify-between mb-6 sm:mb-8">
           <div className="flex-1 min-w-0">
-            <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl">
+            <h2 className="text-2xl font-bold leading-7 text-primary sm:text-3xl">
               Your Profile
             </h2>
           </div>
         </div>
 
-        <div className="bg-white shadow overflow-hidden sm:rounded-lg">
+        <div className="bg-card shadow-sm overflow-hidden rounded-lg">
           <div className="px-4 py-5 sm:p-6">
             {message && (
               <div className="mb-4 p-4 bg-green-50 text-green-700 rounded-md border border-green-200">
@@ -82,7 +82,7 @@ export default function Profile() {
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <label htmlFor="displayName" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="displayName" className="block text-sm font-medium text-foreground">
                   Display Name
                 </label>
                 <div className="mt-1">
@@ -92,13 +92,13 @@ export default function Profile() {
                     id="displayName"
                     value={formData.displayName}
                     onChange={handleChange}
-                    className="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                    className="shadow-sm focus:ring-primary focus:border-primary block w-full sm:text-sm border-border rounded-md bg-background"
                   />
                 </div>
               </div>
 
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="email" className="block text-sm font-medium text-foreground">
                   Email
                 </label>
                 <div className="mt-1">
@@ -108,16 +108,16 @@ export default function Profile() {
                     id="email"
                     value={user?.email || ''}
                     disabled
-                    className="shadow-sm bg-gray-50 block w-full sm:text-sm border-gray-300 rounded-md"
+                    className="shadow-sm bg-muted block w-full sm:text-sm border-border rounded-md"
                   />
                 </div>
-                <p className="mt-1 text-sm text-gray-500">
+                <p className="mt-1 text-sm text-muted-foreground">
                   Email cannot be changed. Contact support if you need to update your email.
                 </p>
               </div>
 
               <div>
-                <label htmlFor="photoURL" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="photoURL" className="block text-sm font-medium text-foreground">
                   Profile Picture URL (Optional)
                 </label>
                 <div className="mt-1">
@@ -128,7 +128,7 @@ export default function Profile() {
                     value={formData.photoURL || ''}
                     onChange={handleChange}
                     placeholder="https://example.com/avatar.jpg"
-                    className="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                    className="shadow-sm focus:ring-primary focus:border-primary block w-full sm:text-sm border-border rounded-md bg-background"
                   />
                 </div>
               </div>
@@ -137,22 +137,22 @@ export default function Profile() {
                 <button
                   type="submit"
                   disabled={updating}
-                  className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
                 >
                   {updating ? 'Saving...' : 'Save Changes'}
                 </button>
               </div>
             </form>
 
-            <div className="mt-10 border-t border-gray-200 pt-6">
-              <h3 className="text-lg leading-6 font-medium text-gray-900">Account Settings</h3>
-              <div className="mt-2 max-w-xl text-sm text-gray-500">
+            <div className="mt-8 sm:mt-10 border-t border-border pt-6">
+              <h3 className="text-lg leading-6 font-medium text-foreground">Account Settings</h3>
+              <div className="mt-2 max-w-xl text-sm text-muted-foreground">
                 <p>Additional account management options</p>
               </div>
               <div className="mt-5">
                 <button
                   type="button"
-                  className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  className="inline-flex items-center px-4 py-2 border border-border shadow-sm text-sm font-medium rounded-md text-foreground bg-card hover:bg-muted/50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
                   onClick={() => router.push('/profile/change-password')}
                 >
                   Change Password

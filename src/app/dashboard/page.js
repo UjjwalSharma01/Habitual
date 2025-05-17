@@ -8,6 +8,7 @@ import AppLayout from '@/components/layout/AppLayout';
 import HabitList from '@/components/habits/HabitList';
 import HabitOverviewCard from '@/components/habits/HabitOverviewCard';
 import QuoteCard from '@/components/common/QuoteCard';
+import DashboardRecommendations from '@/components/analytics/DashboardRecommendations';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase/firebase';
 
@@ -59,7 +60,7 @@ export default function Dashboard() {
     if (user) {
       fetchHabits();
     }
-  }, [user, loading, router]);
+  }, [user, loading, router, loadingOnboarding, onboardingState.completed]);
 
   if (loading || !user) {
     return (
@@ -91,8 +92,13 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="mt-8">
-          <QuoteCard />
+        <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+          <div className="md:col-span-2">
+            <QuoteCard />
+          </div>
+          <div>
+            <DashboardRecommendations habits={habits} />
+          </div>
         </div>
         
         {habits.length > 0 && (
@@ -154,7 +160,7 @@ export default function Dashboard() {
                 <HabitList habits={habits} />
               ) : (
                 <div className="px-4 py-8 sm:py-12 text-center text-muted-foreground">
-                  <p>You don't have any habits yet.</p>
+                  <p>You don&apos;t have any habits yet.</p>
                   <button
                     onClick={() => router.push('/habits/new')}
                     className="mt-4 inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"

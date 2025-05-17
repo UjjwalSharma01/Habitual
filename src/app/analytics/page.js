@@ -6,6 +6,8 @@ import { useAuth } from '@/context/AuthContext';
 import AppLayout from '@/components/layout/AppLayout';
 import HeatMap from '@/components/analytics/HeatMap';
 import HabitDetailStats from '@/components/analytics/HabitDetailStats';
+import InsightsDashboard from '@/components/analytics/InsightsDashboard';
+import HabitCorrelations from '@/components/analytics/HabitCorrelations';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase/firebase';
 
@@ -227,6 +229,46 @@ export default function Analytics() {
             )}
           </div>
         </div>
+
+        {/* AI Insights Dashboard */}
+        <div className="mt-6 sm:mt-8">
+          <div className="shadow overflow-hidden sm:rounded-lg bg-card-background text-card-foreground">
+            <div className="px-3 py-3 sm:py-5 sm:px-6">
+              <h3 className="text-md sm:text-lg leading-6 font-medium text-foreground">
+                {selectedHabit === 'all' ? 'Analytics Dashboard' : 'AI-Powered Insights'}
+              </h3>
+              <p className="mt-1 max-w-2xl text-xs sm:text-sm text-muted-foreground">
+                {selectedHabit === 'all' 
+                  ? 'Smart analysis of your habit data and personalized recommendations'
+                  : `Personalized insights for ${habits.find(h => h.id === selectedHabit)?.name}`}
+              </p>
+            </div>
+            
+            <div className="border-t border-border px-3 py-3 sm:px-4 sm:py-5">
+              <InsightsDashboard habits={habits} selectedHabit={selectedHabit} />
+            </div>
+          </div>
+        </div>
+
+        {/* Habit Correlations - Show only on All Habits view */}
+        {selectedHabit === 'all' && habits.length >= 2 && (
+          <div className="mt-6 sm:mt-8">
+            <div className="shadow overflow-hidden sm:rounded-lg bg-card-background text-card-foreground">
+              <div className="px-3 py-3 sm:py-5 sm:px-6">
+                <h3 className="text-md sm:text-lg leading-6 font-medium text-foreground">
+                  Habit Connections
+                </h3>
+                <p className="mt-1 max-w-2xl text-xs sm:text-sm text-muted-foreground">
+                  Discover how your habits influence each other
+                </p>
+              </div>
+              
+              <div className="border-t border-border px-3 py-3 sm:px-4 sm:py-5">
+                <HabitCorrelations habits={habits} />
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Detailed stats for individual habits */}
         {selectedHabit !== 'all' && (

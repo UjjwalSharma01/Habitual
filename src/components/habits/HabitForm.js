@@ -169,7 +169,7 @@ export default function HabitForm({ initialData = {}, onSubmit, submitButtonText
         <div className="pt-8">
           <div>
             <h3 className="text-lg font-medium leading-6 text-foreground">Motivation & Integration</h3>
-            <p className="mt-1 text-sm text-muted-foreground">Understanding your 'why' boosts consistency</p>
+            <p className="mt-1 text-sm text-muted-foreground">Understanding your &apos;why&apos; boosts consistency</p>
           </div>
 
           <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
@@ -208,7 +208,7 @@ export default function HabitForm({ initialData = {}, onSubmit, submitButtonText
                   placeholder="e.g., After morning coffee, Before bed"
                 />
                 <p className="mt-1 text-xs text-muted-foreground">
-                  Habit stacking: "After/Before I [existing habit], I will [new habit]"
+                  Habit stacking: &quot;After/Before I [existing habit], I will [new habit]&quot;
                 </p>
               </div>
             </div>
@@ -346,7 +346,7 @@ export default function HabitForm({ initialData = {}, onSubmit, submitButtonText
                   onChange={handleChange}
                   className="shadow-sm focus:ring-primary focus:border-primary block w-full sm:text-sm border-border rounded-md bg-background"
                 >
-                  <option value="binary">Yes/No (Did it or didn't)</option>
+                  <option value="binary">Yes/No (Did it or didn&apos;t)</option>
                   <option value="numeric">Numeric (e.g., minutes, pages)</option>
                   <option value="progress">Progress Bar (multi-step goals)</option>
                 </select>

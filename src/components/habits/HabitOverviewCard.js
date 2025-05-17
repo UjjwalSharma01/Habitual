@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 export default function HabitOverviewCard({ habit, period = 'weekly' }) {
   const [overview, setOverview] = useState({
@@ -11,17 +11,9 @@ export default function HabitOverviewCard({ habit, period = 'weekly' }) {
     bestDay: null,
     data: [] // Daily data for the chart
   });
-
-  // Calculate overview data when habit or period changes
-  useEffect(() => {
-    if (!habit || !habit.checkIns) {
-      return;
-    }
-    
-    calculateOverview();
-  }, [habit, period]);
   
-  const calculateOverview = () => {
+  // Memoize the calculateOverview function
+  const calculateOverview = useCallback(() => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     
@@ -121,7 +113,16 @@ export default function HabitOverviewCard({ habit, period = 'weekly' }) {
       bestDay,
       data: dailyData
     });
-  };
+  }, [habit, period]);
+  
+  // Calculate overview data when habit or period changes
+  useEffect(() => {
+    if (!habit || !habit.checkIns) {
+      return;
+    }
+    
+    calculateOverview();
+  }, [habit, period, calculateOverview]);
 
   // Format date for display
   const formatDateRange = () => {

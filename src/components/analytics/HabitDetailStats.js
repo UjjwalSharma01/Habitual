@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 export default function HabitDetailStats({ habit }) {
   const [stats, setStats] = useState({
@@ -12,16 +12,8 @@ export default function HabitDetailStats({ habit }) {
     progressDistribution: [] // For multi-step habits
   });
 
-  useEffect(() => {
-    if (!habit || !habit.checkIns) {
-      return;
-    }
-
-    // Calculate stats based on habit type and check-ins
-    calculateStats();
-  }, [habit]);
-
-  const calculateStats = () => {
+  // Memoize the calculateStats function to avoid dependency issues
+  const calculateStats = useCallback(() => {
     if (!habit.checkIns) {
       return;
     }
@@ -103,7 +95,17 @@ export default function HabitDetailStats({ habit }) {
       averageValue,
       progressDistribution
     });
-  };
+  }, [habit]);
+  
+  // Add useEffect to call calculateStats when habit changes
+  useEffect(() => {
+    if (!habit || !habit.checkIns) {
+      return;
+    }
+
+    // Calculate stats based on habit type and check-ins
+    calculateStats();
+  }, [habit, calculateStats]);
   
   // Calculate streak statistics
   const calculateStreaks = (habit) => {

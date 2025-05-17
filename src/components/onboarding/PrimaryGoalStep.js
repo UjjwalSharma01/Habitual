@@ -88,9 +88,9 @@ export default function PrimaryGoalStep() {
         className="space-y-8"
       >
         <div className="text-center space-y-3">
-          <h2 className="text-3xl font-bold tracking-tight text-gray-900">What's your main focus?</h2>
+          <h2 className="text-3xl font-bold tracking-tight text-gray-900">What&apos;s your main focus?</h2>
           <p className="text-lg text-gray-600 max-w-lg mx-auto">
-            We'll help you build habits that support your primary goal.
+            We&apos;ll help you build habits that support your primary goal.
           </p>
         </div>
 

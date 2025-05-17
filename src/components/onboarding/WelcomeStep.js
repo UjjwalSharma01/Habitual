@@ -38,7 +38,7 @@ export default function WelcomeStep() {
           transition={{ delay: 0.5, duration: 0.6 }}
         >
           Craft habits that truly fit <span className="text-blue-600 font-semibold">your</span> life.
-          We'll help you integrate new habits into your existing routines for lasting success.
+          We&apos;ll help you integrate new habits into your existing routines for lasting success.
         </motion.p>
         
         <motion.div
