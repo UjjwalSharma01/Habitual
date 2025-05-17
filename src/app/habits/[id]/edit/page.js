@@ -37,10 +37,10 @@ export default function EditHabit({ params }) {
     
     // Fetch the habit
     const fetchHabit = async () => {
-      if (!user || !params.id) return;
+      if (!user || !unwrappedParams.id) return;
       
       try {
-        const habitRef = doc(db, 'habits', params.id);
+        const habitRef = doc(db, 'habits', unwrappedParams.id);
         const habitSnap = await getDoc(habitRef);
         
         if (!habitSnap.exists()) {
@@ -82,7 +82,7 @@ export default function EditHabit({ params }) {
     if (user) {
       fetchHabit();
     }
-  }, [user, loading, params.id, router]);
+  }, [user, loading, unwrappedParams.id, router]);
   
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -114,7 +114,7 @@ export default function EditHabit({ params }) {
     setError('');
     
     try {
-      const habitRef = doc(db, 'habits', params.id);
+      const habitRef = doc(db, 'habits', unwrappedParams.id);
       
       const updatedHabit = {
         name: formData.name,
@@ -130,7 +130,7 @@ export default function EditHabit({ params }) {
       await updateDoc(habitRef, updatedHabit);
       
       // Navigate back to habit detail
-      router.push(`/habits/${params.id}`);
+      router.push(`/habits/${unwrappedParams.id}`);
     } catch (error) {
       console.error('Error updating habit:', error);
       setError('Failed to update habit. Please try again.');
@@ -146,7 +146,7 @@ export default function EditHabit({ params }) {
     
     try {
       setSubmitting(true);
-      const habitRef = doc(db, 'habits', params.id);
+      const habitRef = doc(db, 'habits', unwrappedParams.id);
       await deleteDoc(habitRef);
       router.push('/dashboard');
     } catch (error) {
@@ -200,7 +200,7 @@ export default function EditHabit({ params }) {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 md:py-8">
         <div className="flex items-center mb-6">
           <button
-            onClick={() => router.push(`/habits/${params.id}`)}
+            onClick={() => router.push(`/habits/${unwrappedParams.id}`)}
             className="mr-3 p-1 rounded-full hover:bg-muted text-foreground"
           >
             <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -425,7 +425,7 @@ export default function EditHabit({ params }) {
             <div className="space-x-3">
               <button
                 type="button"
-                onClick={() => router.push(`/habits/${params.id}`)}
+                onClick={() => router.push(`/habits/${unwrappedParams.id}`)}
                 className="py-2 px-4 border border-border rounded-md shadow-sm text-sm font-medium text-foreground bg-background hover:bg-muted focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
                 disabled={submitting}
               >

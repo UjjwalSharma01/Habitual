@@ -30,11 +30,11 @@ export default function HabitDetail({ params }) {
     
     // Fetch the specific habit and all habits for context
     const fetchData = async () => {
-      if (!user || !params.id) return;
+      if (!user || !unwrappedParams.id) return;
       
       try {
         // Get the specific habit
-        const habitRef = doc(db, 'habits', params.id);
+        const habitRef = doc(db, 'habits', unwrappedParams.id);
         const habitSnap = await getDoc(habitRef);
         
         if (!habitSnap.exists()) {
@@ -79,7 +79,7 @@ export default function HabitDetail({ params }) {
     if (user) {
       fetchData();
     }
-  }, [user, loading, params.id, router]);
+  }, [user, loading, unwrappedParams.id, router]);
   
   if (loading || loadingData) {
     return (
