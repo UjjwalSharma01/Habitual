@@ -9,7 +9,8 @@ export default function HeroSection({ user }) {
     <div className="relative isolate overflow-hidden">
       {/* Background gradient */}
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(45%_40%_at_50%_60%,rgba(59,130,246,0.1),rgba(255,255,255,0))]"></div>
-      <div className="absolute inset-y-0 right-1/2 -z-10 mr-16 w-[200%] origin-bottom-left skew-x-[-30deg] bg-card-background shadow-xl shadow-primary/10 ring-1 ring-border sm:mr-28 lg:mr-0 lg:right-full lg:-translate-x-1/2 lg:skew-x-0"></div>
+      <div className="hidden sm:block absolute inset-y-0 right-1/2 -z-10 mr-16 w-[200%] origin-bottom-left skew-x-[-30deg] bg-card-background shadow-xl shadow-primary/10 ring-1 ring-border sm:mr-28 lg:mr-0 lg:right-full lg:-translate-x-1/2 lg:skew-x-0"></div>
+      <div className="sm:hidden absolute inset-y-0 inset-x-0 -z-10 bg-card-background/50 shadow-xl shadow-primary/10 ring-1 ring-border"></div>
       
       <div className="mx-auto max-w-7xl px-4 sm:px-6 py-16 sm:py-24 lg:flex lg:items-center lg:gap-x-10 lg:px-8 lg:py-40">
         <motion.div 
@@ -54,7 +55,7 @@ export default function HeroSection({ user }) {
                     <span className="relative flex items-center gap-2">
                       <span className="sm:hidden">Get Started</span>
                       <span className="hidden sm:inline">Begin Your Journey</span>
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform group-hover:translate-x-1"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform group-hover:translate-x-1"><path d="M5 12h14m-7-7l7 7-7 7"/></svg>
                     </span>
                   </Link>
                 </motion.div>
@@ -66,7 +67,7 @@ export default function HeroSection({ user }) {
                   <Link href="/auth/login" className="group relative inline-flex h-12 w-full sm:w-auto items-center justify-center overflow-hidden rounded-full border border-primary/30 bg-transparent px-6 py-2 text-sm font-medium text-foreground transition-all hover:border-primary hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2">
                     <span className="relative flex items-center gap-2">
                       Log in
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform group-hover:translate-x-1"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform group-hover:translate-x-1"><path d="M5 12h14m-7-7l7 7-7 7"/></svg>
                     </span>
                   </Link>
                 </motion.div>
@@ -83,7 +84,7 @@ export default function HeroSection({ user }) {
                 >
                   <span className="relative flex items-center gap-2">
                     Go to Dashboard
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform group-hover:translate-x-1"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform group-hover:translate-x-1"><path d="M5 12h14m-7-7l7 7-7 7"/></svg>
                   </span>
                 </Link>
               </motion.div>

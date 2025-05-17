@@ -14,7 +14,8 @@ export default function CTASection({ user }) {
     <div className="relative isolate my-24 sm:my-32 overflow-hidden">
       {/* Background design elements */}
       <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-y-0 right-1/2 -z-10 mr-16 w-[200%] origin-bottom-left skew-x-[-30deg] bg-card-background shadow-xl shadow-primary/5 ring-1 ring-border sm:mr-28 lg:mr-0 lg:right-full lg:-translate-x-1/2 lg:skew-x-0"></div>
+        <div className="hidden sm:block absolute inset-y-0 right-1/2 -z-10 mr-16 w-[200%] origin-bottom-left skew-x-[-30deg] bg-card-background shadow-xl shadow-primary/5 ring-1 ring-border sm:mr-28 lg:mr-0 lg:right-full lg:-translate-x-1/2 lg:skew-x-0"></div>
+        <div className="sm:hidden absolute inset-y-0 inset-x-0 -z-10 bg-card-background/50 shadow-xl shadow-primary/5 ring-1 ring-border"></div>
         <div className="absolute inset-0 -z-10 bg-[radial-gradient(45%_40%_at_50%_60%,rgba(59,130,246,0.12),rgba(255,255,255,0))]"></div>
       </div>
       
@@ -67,7 +68,7 @@ export default function CTASection({ user }) {
                       >
                         <span className="relative flex items-center gap-2">
                           Start your journey
-                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform group-hover:translate-x-1"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform group-hover:translate-x-1"><path d="M5 12h14m-7-7l7 7-7 7"/></svg>
                         </span>
                       </Link>
                     </motion.div>
@@ -78,7 +79,7 @@ export default function CTASection({ user }) {
                       <Link href="/auth/login" className="group relative inline-flex h-12 items-center justify-center overflow-hidden rounded-full border border-primary/30 bg-transparent px-6 py-2 text-sm font-medium text-foreground transition-all hover:border-primary hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2">
                         <span className="relative flex items-center gap-2">
                           Log in
-                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform group-hover:translate-x-1"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform group-hover:translate-x-1"><path d="M5 12h14m-7-7l7 7-7 7"/></svg>
                         </span>
                       </Link>
                     </motion.div>
@@ -94,7 +95,7 @@ export default function CTASection({ user }) {
                     >
                       <span className="relative flex items-center gap-2">
                         Go to Dashboard
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform group-hover:translate-x-1"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform group-hover:translate-x-1"><path d="M5 12h14m-7-7l7 7-7 7"/></svg>
                       </span>
                     </Link>
                   </motion.div>
