@@ -108,7 +108,15 @@ export default function HeatMap({ data }) {
   }
 
   return (
-    <div className="relative overflow-x-auto">
+    <div className="relative overflow-x-auto"
+         ref={(el) => {
+           // Scroll to the right end (showing most recent data) when component mounts
+           if (el) {
+             setTimeout(() => {
+               el.scrollLeft = el.scrollWidth;
+             }, 100); // Small delay to ensure component is fully rendered
+           }
+         }}>
       <div className="min-w-[700px] pb-4">
         {/* Month labels */}
         <div className="flex mb-1 text-xs text-muted-foreground pl-10">
