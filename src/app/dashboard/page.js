@@ -6,6 +6,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useOnboarding } from '@/context/OnboardingContext';
 import AppLayout from '@/components/layout/AppLayout';
 import HabitList from '@/components/habits/HabitList';
+import HabitOverviewCard from '@/components/habits/HabitOverviewCard';
 import QuoteCard from '@/components/common/QuoteCard';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase/firebase';
@@ -17,6 +18,7 @@ export default function Dashboard() {
   const [habits, setHabits] = useState([]);
   const [loadingHabits, setLoadingHabits] = useState(true);
   const [error, setError] = useState('');
+  const [selectedHabit, setSelectedHabit] = useState(null);
 
   useEffect(() => {
     // Redirect if not logged in
@@ -92,6 +94,42 @@ export default function Dashboard() {
         <div className="mt-8">
           <QuoteCard />
         </div>
+        
+        {habits.length > 0 && (
+          <div className="mt-6 sm:mt-8">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-3 sm:mb-4 px-1">
+              <h3 className="text-md sm:text-lg leading-6 font-medium text-foreground">Progress Overview</h3>
+              <div className="mt-2 sm:mt-0 w-full sm:w-auto">
+                <select
+                  value={selectedHabit ? selectedHabit.id : ''}
+                  onChange={(e) => {
+                    const habitId = e.target.value;
+                    setSelectedHabit(habitId ? habits.find(h => h.id === habitId) : null);
+                  }}
+                  className="block w-full pl-3 pr-8 py-1 sm:py-2 text-sm rounded-md focus:outline-none focus:ring-primary focus:border-primary border-border bg-background text-foreground"
+                >
+                  <option value="">All habits</option>
+                  {habits.map(habit => (
+                    <option key={habit.id} value={habit.id}>
+                      {habit.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+              <HabitOverviewCard 
+                habit={selectedHabit || habits[0]} 
+                period="weekly" 
+              />
+              <HabitOverviewCard 
+                habit={selectedHabit || habits[0]} 
+                period="monthly" 
+              />
+            </div>
+          </div>
+        )}
 
         <div className="mt-8">
           <div className="shadow overflow-hidden sm:rounded-lg bg-card-background text-card-foreground">

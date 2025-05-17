@@ -25,6 +25,7 @@ export default function HabitForm({ initialData = {}, onSubmit, submitButtonText
     trackingType: 'binary', // binary, numeric, progress
     targetValue: 1,
     unit: '',
+    steps: [], // For progress tracking
     ...initialData
   });
   
@@ -77,13 +78,24 @@ export default function HabitForm({ initialData = {}, onSubmit, submitButtonText
     } else if (formData.frequency === 'specific-days' && !Object.values(formData.specificDays).some(v => v)) {
       isValid = false;
       errorMsg = 'Please select at least one day for your habit';
-    } else if (formData.trackingType !== 'binary') {
+    } else if (formData.trackingType === 'numeric') {
       if (formData.targetValue <= 0) {
         isValid = false;
         errorMsg = 'Please set a valid target value greater than 0';
       } else if (!formData.unit.trim()) {
         isValid = false;
         errorMsg = 'Please specify a unit for tracking (e.g., minutes, pages, etc.)';
+      }
+    } else if (formData.trackingType === 'progress') {
+      // Mark steps as touched for validation
+      setTouched(prev => ({...prev, steps: true}));
+      
+      if (formData.steps.length === 0) {
+        isValid = false;
+        errorMsg = 'Please add at least one step for progress tracking';
+      } else if (formData.steps.some(step => !step.trim())) {
+        isValid = false;
+        errorMsg = 'All steps must have a description';
       }
     }
 
@@ -336,11 +348,12 @@ export default function HabitForm({ initialData = {}, onSubmit, submitButtonText
                 >
                   <option value="binary">Yes/No (Did it or didn't)</option>
                   <option value="numeric">Numeric (e.g., minutes, pages)</option>
+                  <option value="progress">Progress Bar (multi-step goals)</option>
                 </select>
               </div>
             </div>
 
-            {formData.trackingType !== 'binary' && (
+            {formData.trackingType === 'numeric' && (
               <>
                 <div className="sm:col-span-1">
                   <label htmlFor="targetValue" className="block text-sm font-medium text-foreground">
@@ -382,6 +395,67 @@ export default function HabitForm({ initialData = {}, onSubmit, submitButtonText
                   )}
                 </div>
               </>
+            )}
+
+            {formData.trackingType === 'progress' && (
+              <div className="sm:col-span-6">
+                <div className="flex justify-between items-center">
+                  <label className="block text-sm font-medium text-foreground">
+                    Steps <span className="text-red-500">*</span>
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const newSteps = [...formData.steps, ''];
+                      setFormData(prev => ({...prev, steps: newSteps}))
+                    }}
+                    className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-primary-700 bg-primary-100 hover:bg-primary-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+                  >
+                    Add Step
+                  </button>
+                </div>
+                
+                <div className="space-y-2 mt-2">
+                  {formData.steps.length === 0 && (
+                    <p className="text-sm text-muted-foreground">Add steps to track progress through your habit</p>
+                  )}
+                  
+                  {formData.steps.map((step, index) => (
+                    <div key={index} className="flex items-center gap-2">
+                      <div className="flex-1">
+                        <input
+                          type="text"
+                          value={step}
+                          onChange={(e) => {
+                            const newSteps = [...formData.steps];
+                            newSteps[index] = e.target.value;
+                            setFormData(prev => ({...prev, steps: newSteps}))
+                          }}
+                          placeholder={`Step ${index+1}`}
+                          className="shadow-sm focus:ring-primary focus:border-primary block w-full sm:text-sm border-border rounded-md bg-background"
+                        />
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const newSteps = [...formData.steps];
+                          newSteps.splice(index, 1);
+                          setFormData(prev => ({...prev, steps: newSteps}))
+                        }}
+                        className="p-1 text-red-500 hover:text-red-700"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </button>
+                    </div>
+                  ))}
+                </div>
+                
+                {touched.steps && formData.steps.length === 0 && (
+                  <p className="mt-1 text-xs text-red-500">At least one step is required</p>
+                )}
+              </div>
             )}
           </div>
         </div>

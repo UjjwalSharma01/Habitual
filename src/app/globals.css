@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+/* Custom utility classes */
+.text-2xs {
+  font-size: 0.65rem; /* Even smaller than xs (which is 0.75rem) */
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import AppLayout from '@/components/layout/AppLayout';
 import HeatMap from '@/components/analytics/HeatMap';
+import HabitDetailStats from '@/components/analytics/HabitDetailStats';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase/firebase';
 
@@ -47,7 +48,21 @@ export default function Analytics() {
         habitsData.forEach(habit => {
           if (habit.checkIns) {
             Object.entries(habit.checkIns).forEach(([date, value]) => {
-              if (value) {
+              // Determine if the habit is completed based on tracking type
+              let isCompleted = false;
+              
+              if (habit.trackingType === 'binary') {
+                isCompleted = value === true;
+              } else if (habit.trackingType === 'numeric') {
+                isCompleted = value?.value >= habit.targetValue;
+              } else if (habit.trackingType === 'progress') {
+                isCompleted = value?.completed;
+              } else {
+                isCompleted = !!value; // Fallback for legacy data
+              }
+              
+              // If the habit is completed for this date
+              if (isCompleted) {
                 // If the date already exists, increment the count
                 if (allCheckIns[date]) {
                   allCheckIns[date]++;
@@ -85,7 +100,20 @@ export default function Analytics() {
         habits.forEach(habit => {
           if (habit.checkIns) {
             Object.entries(habit.checkIns).forEach(([date, value]) => {
-              if (value) {
+              // Determine if the habit is completed based on tracking type
+              let isCompleted = false;
+              
+              if (habit.trackingType === 'binary') {
+                isCompleted = value === true;
+              } else if (habit.trackingType === 'numeric') {
+                isCompleted = value?.value >= habit.targetValue;
+              } else if (habit.trackingType === 'progress') {
+                isCompleted = value?.completed;
+              } else {
+                isCompleted = !!value; // Fallback for legacy data
+              }
+              
+              if (isCompleted) {
                 if (allCheckIns[date]) {
                   allCheckIns[date]++;
                 } else {
@@ -104,7 +132,20 @@ export default function Analytics() {
           const habitCheckIns = {};
           
           Object.entries(habit.checkIns).forEach(([date, value]) => {
-            if (value) {
+            // Determine if the habit is completed based on tracking type
+            let isCompleted = false;
+            
+            if (habit.trackingType === 'binary') {
+              isCompleted = value === true;
+            } else if (habit.trackingType === 'numeric') {
+              isCompleted = value?.value >= habit.targetValue;
+            } else if (habit.trackingType === 'progress') {
+              isCompleted = value?.completed;
+            } else {
+              isCompleted = !!value; // Fallback for legacy data
+            }
+            
+            if (isCompleted) {
               habitCheckIns[date] = 1;
             }
           });
@@ -150,10 +191,10 @@ export default function Analytics() {
         )}
 
         <div className="shadow overflow-hidden sm:rounded-lg bg-card-background text-card-foreground">
-          <div className="px-4 py-4 sm:py-5 sm:px-6 flex flex-col sm:flex-row sm:flex-wrap items-start sm:items-center justify-between gap-2">
+          <div className="px-3 py-3 sm:py-5 sm:px-6 flex flex-col sm:flex-row sm:flex-wrap items-start sm:items-center justify-between gap-2">
             <div>
-              <h3 className="text-lg leading-6 font-medium text-foreground">Activity Heatmap</h3>
-              <p className="mt-1 max-w-2xl text-sm text-muted-foreground">Visualize your habits consistency</p>
+              <h3 className="text-md sm:text-lg leading-6 font-medium text-foreground">Activity Heatmap</h3>
+              <p className="mt-1 max-w-2xl text-xs sm:text-sm text-muted-foreground">Visualize your habits consistency</p>
             </div>
             
             <div className="w-full sm:w-auto mt-2 sm:mt-0">
@@ -161,7 +202,7 @@ export default function Analytics() {
                 id="habitSelect"
                 value={selectedHabit}
                 onChange={(e) => setSelectedHabit(e.target.value)}
-                className="block w-full pl-3 pr-10 py-2 text-base rounded-md focus:outline-none focus:ring-primary focus:border-primary text-sm border-border bg-background text-foreground"
+                className="block w-full pl-3 pr-8 py-1 sm:py-2 text-sm rounded-md focus:outline-none focus:ring-primary focus:border-primary border-border bg-background text-foreground"
               >
                 <option value="all">All Habits</option>
                 {habits.map(habit => (
@@ -187,7 +228,25 @@ export default function Analytics() {
           </div>
         </div>
 
-        {/* Additional analytics sections would go here */}
+        {/* Detailed stats for individual habits */}
+        {selectedHabit !== 'all' && (
+          <div className="mt-6 sm:mt-8">
+            <div className="shadow overflow-hidden sm:rounded-lg bg-card-background text-card-foreground">
+              <div className="px-3 py-3 sm:py-5 sm:px-6">
+                <h3 className="text-md sm:text-lg leading-6 font-medium text-foreground">
+                  Detailed Statistics
+                </h3>
+                <p className="mt-1 max-w-2xl text-xs sm:text-sm text-muted-foreground">
+                  Advanced tracking metrics for {habits.find(h => h.id === selectedHabit)?.name}
+                </p>
+              </div>
+              
+              <div className="border-t border-border px-3 py-3 sm:px-4 sm:py-5">
+                <HabitDetailStats habit={habits.find(h => h.id === selectedHabit)} />
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </AppLayout>
   );
