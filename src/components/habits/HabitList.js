@@ -17,34 +17,34 @@ export default function HabitList({ habits }) {
 
   return (
     <div>
-      <div className="border-b border-gray-200">
+      <div className="border-b border-border">
         <nav className="flex -mb-px">
           <button
             onClick={() => setFilter('all')}
-            className={`w-1/3 py-4 px-1 text-center border-b-2 font-medium text-sm ${
+            className={`w-1/3 py-2 sm:py-4 px-1 text-center border-b-2 font-medium text-xs sm:text-sm ${
               filter === 'all'
-                ? 'border-blue-500 text-blue-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                ? 'border-primary text-primary'
+                : 'border-transparent text-muted-foreground hover:text-foreground hover:border-border'
             }`}
           >
             All Habits
           </button>
           <button
             onClick={() => setFilter('active')}
-            className={`w-1/3 py-4 px-1 text-center border-b-2 font-medium text-sm ${
+            className={`w-1/3 py-2 sm:py-4 px-1 text-center border-b-2 font-medium text-xs sm:text-sm ${
               filter === 'active'
-                ? 'border-blue-500 text-blue-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                ? 'border-primary text-primary'
+                : 'border-transparent text-muted-foreground hover:text-foreground hover:border-border'
             }`}
           >
             Active
           </button>
           <button
             onClick={() => setFilter('completed')}
-            className={`w-1/3 py-4 px-1 text-center border-b-2 font-medium text-sm ${
+            className={`w-1/3 py-2 sm:py-4 px-1 text-center border-b-2 font-medium text-xs sm:text-sm ${
               filter === 'completed'
-                ? 'border-blue-500 text-blue-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                ? 'border-primary text-primary'
+                : 'border-transparent text-muted-foreground hover:text-foreground hover:border-border'
             }`}
           >
             Completed
@@ -52,12 +52,12 @@ export default function HabitList({ habits }) {
         </nav>
       </div>
 
-      <ul className="divide-y divide-gray-200">
+      <ul className="divide-y divide-border">
         {filteredHabits.map(habit => (
           <HabitItem key={habit.id} habit={habit} />
         ))}
         {filteredHabits.length === 0 && (
-          <li className="py-8 text-center text-gray-500">
+          <li className="py-8 text-center text-muted-foreground">
             No habits match your filter.
           </li>
         )}

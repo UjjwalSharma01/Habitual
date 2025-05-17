@@ -50,13 +50,13 @@ export default function NewHabit() {
 
   return (
     <AppLayout>
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="md:flex md:items-center md:justify-between mb-8">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 md:py-8">
+        <div className="flex flex-col mb-6 sm:mb-8">
           <div className="flex-1 min-w-0">
-            <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl">
+            <h2 className="text-xl font-bold leading-7 text-foreground sm:text-2xl md:text-3xl">
               Create a New Habit
             </h2>
-            <p className="mt-1 text-sm text-gray-500">
+            <p className="mt-1 text-sm text-muted-foreground">
               Define your new habit with details to help you track consistently
             </p>
           </div>

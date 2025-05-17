@@ -62,12 +62,12 @@ export default function QuoteCard() {
 
   if (loading) {
     return (
-      <div className="bg-white shadow overflow-hidden sm:rounded-lg">
-        <div className="px-4 py-5 sm:p-6">
+      <div className="shadow overflow-hidden rounded-lg bg-card-background">
+        <div className="px-3 py-4 sm:px-4 sm:py-5">
           <div className="animate-pulse flex space-x-4">
             <div className="flex-1 space-y-4 py-1">
-              <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-              <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+              <div className="h-4 rounded w-3/4 bg-muted"></div>
+              <div className="h-4 rounded w-1/2 bg-muted"></div>
             </div>
           </div>
         </div>
@@ -76,15 +76,15 @@ export default function QuoteCard() {
   }
 
   return (
-    <div className="bg-gradient-to-r from-blue-500 to-indigo-600 shadow overflow-hidden sm:rounded-lg">
-      <div className="px-4 py-5 sm:p-6 text-white">
+    <div className="bg-gradient-to-r from-blue-500 to-indigo-600 shadow overflow-hidden rounded-lg">
+      <div className="px-3 py-4 sm:px-5 sm:py-6 text-white">
         <div className="flex items-start">
-          <svg className="h-8 w-8 mr-3 text-white opacity-80" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className="h-6 w-6 sm:h-8 sm:w-8 mr-2 sm:mr-3 flex-shrink-0 text-white opacity-80" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
           </svg>
           <div>
-            <p className="text-xl font-medium">{quote?.text}</p>
-            <p className="mt-2 text-sm opacity-90">— {quote?.author}</p>
+            <p className="text-base sm:text-xl font-medium">{quote?.text}</p>
+            <p className="mt-1 sm:mt-2 text-xs sm:text-sm opacity-90">— {quote?.author}</p>
           </div>
         </div>
       </div>

@@ -85,7 +85,7 @@ export default function Login() {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
-          <div className="bg-white px-6 py-12 shadow sm:rounded-lg sm:px-12">
+          <div className="px-6 py-12 shadow sm:rounded-lg sm:px-12" style={{ backgroundColor: 'var(--card-background)', color: 'var(--card-foreground)' }}>
             {error && (
               <div className="mb-4 p-4 bg-red-50 text-red-700 rounded-md border border-red-200">
                 {error}
@@ -100,7 +100,7 @@ export default function Login() {
             {!resetMode ? (
               <form className="space-y-6" onSubmit={handleLogin}>
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
+                  <label htmlFor="email" className="block text-sm font-medium leading-6" style={{ color: 'var(--card-foreground)' }}>
                     Email address
                   </label>
                   <div className="mt-2">
@@ -112,13 +112,18 @@ export default function Login() {
                       required
                       value={formData.email}
                       onChange={handleChange}
-                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                      className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                      style={{ 
+                        backgroundColor: 'var(--background)', 
+                        color: 'var(--foreground)',
+                        borderColor: 'var(--border)',
+                      }}
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
+                  <label htmlFor="password" className="block text-sm font-medium leading-6" style={{ color: 'var(--card-foreground)' }}>
                     Password
                   </label>
                   <div className="mt-2">

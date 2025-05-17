@@ -66,16 +66,16 @@ export default function HabitItem({ habit }) {
   const currentStreak = calculateStreak();
   
   return (
-    <li className="px-4 py-4 sm:px-6 hover:bg-gray-50">
-      <div className="flex items-center justify-between">
+    <li className="px-3 py-3 sm:px-6 sm:py-4 transition-colors duration-200 hover:bg-muted">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
         <div className="flex items-center">
           <button 
             onClick={handleCheckIn}
             disabled={loading}
-            className={`mr-4 flex-shrink-0 h-6 w-6 rounded-full border-2 flex items-center justify-center ${
+            className={`mr-3 sm:mr-4 flex-shrink-0 h-6 w-6 rounded-full border-2 flex items-center justify-center ${
               completedToday 
                 ? 'border-green-500 bg-green-500 text-white' 
-                : 'border-gray-300 hover:border-gray-400'
+                : 'border-border hover:border-muted-foreground'
             }`}
           >
             {completedToday && (
@@ -85,21 +85,21 @@ export default function HabitItem({ habit }) {
             )}
           </button>
           
-          <div>
-            <div className="text-sm font-medium text-blue-600 truncate">{habit.name}</div>
-            <div className="text-sm text-gray-500 truncate">{habit.description}</div>
+          <div className="flex-1 min-w-0">
+            <div className="text-sm font-medium truncate text-primary">{habit.name}</div>
+            <div className="text-xs sm:text-sm truncate text-muted-foreground max-w-[200px] sm:max-w-[300px]">{habit.description}</div>
           </div>
         </div>
         
-        <div className="flex items-center">
-          <div className="text-sm text-gray-500 mr-4">
+        <div className="flex items-center justify-between pl-9 sm:pl-0 mt-1 sm:mt-0">
+          <div className="text-xs sm:text-sm mr-2 sm:mr-4 text-muted-foreground">
             Streak: <span className="font-medium">{currentStreak} days</span>
           </div>
           <button
             onClick={() => router.push(`/habits/${habit.id}`)}
-            className="ml-2 inline-flex items-center p-2 rounded-full bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            className="ml-2 inline-flex items-center p-1.5 sm:p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-200 bg-card-background text-muted-foreground"
           >
-            <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="h-4 w-4 sm:h-5 sm:w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
           </button>

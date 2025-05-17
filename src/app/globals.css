@@ -3,6 +3,19 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --card-background: #ffffff;
+  --card-foreground: #171717;
+  --navbar-background: #ffffff;
+  --navbar-foreground: #171717;
+  --footer-background: #ffffff;
+  --footer-foreground: #171717;
+  --primary: #3b82f6;
+  --primary-foreground: #ffffff;
+  --muted: #f3f4f6;
+  --muted-foreground: #4b5563;
+  --border: #e5e7eb;
+  --accent: #f0f9ff;
+  --accent-border: #bfdbfe;
 }
 
 @theme inline {
@@ -16,11 +29,30 @@
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    --card-background: #171717;
+    --card-foreground: #ededed;
+    --navbar-background: #171717;
+    --navbar-foreground: #ededed;
+    --footer-background: #171717;
+    --footer-foreground: #ededed;
+    --primary: #3b82f6;
+    --primary-foreground: #ffffff;
+    --muted: #272727;
+    --muted-foreground: #a3a3a3;
+    --border: #333333;
+    --accent: #172033;
+    --accent-border: #2563eb;
   }
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }

@@ -105,18 +105,18 @@ export default function HabitForm({ initialData = {}, onSubmit, submitButtonText
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
       onSubmit={handleSubmit} 
-      className="space-y-8 divide-y divide-gray-200"
+      className="space-y-8 divide-y divide-border"
     >
-      <div className="space-y-8 divide-y divide-gray-200">
+      <div className="space-y-8 divide-y divide-border">
         <div className="pt-4">
           <div>
-            <h3 className="text-lg font-medium leading-6 text-gray-900">Basic Information</h3>
-            <p className="mt-1 text-sm text-gray-500">Define what habit you want to build</p>
+            <h3 className="text-lg font-medium leading-6 text-foreground">Basic Information</h3>
+            <p className="mt-1 text-sm text-muted-foreground">Define what habit you want to build</p>
           </div>
 
           <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
             <div className="sm:col-span-4">
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="name" className="block text-sm font-medium text-foreground">
                 Habit Name <span className="text-red-500">*</span>
               </label>
               <div className="mt-1">
@@ -126,7 +126,7 @@ export default function HabitForm({ initialData = {}, onSubmit, submitButtonText
                   id="name"
                   value={formData.name}
                   onChange={handleChange}
-                  className="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                  className="shadow-sm focus:ring-primary focus:border-primary block w-full sm:text-sm border-border rounded-md bg-background"
                   placeholder="e.g., Morning Meditation, Daily Reading"
                 />
               </div>
@@ -136,7 +136,7 @@ export default function HabitForm({ initialData = {}, onSubmit, submitButtonText
             </div>
 
             <div className="sm:col-span-6">
-              <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="description" className="block text-sm font-medium text-foreground">
                 Description (Optional)
               </label>
               <div className="mt-1">
@@ -146,7 +146,7 @@ export default function HabitForm({ initialData = {}, onSubmit, submitButtonText
                   rows={3}
                   value={formData.description}
                   onChange={handleChange}
-                  className="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                  className="shadow-sm focus:ring-primary focus:border-primary block w-full sm:text-sm border-border rounded-md bg-background"
                   placeholder="Add details about your habit..."
                 ></textarea>
               </div>
@@ -156,13 +156,13 @@ export default function HabitForm({ initialData = {}, onSubmit, submitButtonText
 
         <div className="pt-8">
           <div>
-            <h3 className="text-lg font-medium leading-6 text-gray-900">Motivation & Integration</h3>
-            <p className="mt-1 text-sm text-gray-500">Understanding your 'why' boosts consistency</p>
+            <h3 className="text-lg font-medium leading-6 text-foreground">Motivation & Integration</h3>
+            <p className="mt-1 text-sm text-muted-foreground">Understanding your 'why' boosts consistency</p>
           </div>
 
           <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
             <div className="sm:col-span-6">
-              <label htmlFor="motivation" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="motivation" className="block text-sm font-medium text-foreground">
                 Your Motivation (Recommended)
               </label>
               <div className="mt-1">
@@ -172,17 +172,17 @@ export default function HabitForm({ initialData = {}, onSubmit, submitButtonText
                   rows={3}
                   value={formData.motivation}
                   onChange={handleChange}
-                  className="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                  className="shadow-sm focus:ring-primary focus:border-primary block w-full sm:text-sm border-border rounded-md bg-background"
                   placeholder="Why is this habit important to you?"
                 ></textarea>
-                <p className="mt-1 text-xs text-gray-500">
+                <p className="mt-1 text-xs text-muted-foreground">
                   This helps you stay committed when motivation dips.
                 </p>
               </div>
             </div>
 
             <div className="sm:col-span-6">
-              <label htmlFor="routine" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="routine" className="block text-sm font-medium text-foreground">
                 Link to Existing Routine (Optional)
               </label>
               <div className="mt-1">
@@ -192,10 +192,10 @@ export default function HabitForm({ initialData = {}, onSubmit, submitButtonText
                   id="routine"
                   value={formData.routine}
                   onChange={handleChange}
-                  className="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                  className="shadow-sm focus:ring-primary focus:border-primary block w-full sm:text-sm border-border rounded-md bg-background"
                   placeholder="e.g., After morning coffee, Before bed"
                 />
-                <p className="mt-1 text-xs text-gray-500">
+                <p className="mt-1 text-xs text-muted-foreground">
                   Habit stacking: "After/Before I [existing habit], I will [new habit]"
                 </p>
               </div>
@@ -205,13 +205,13 @@ export default function HabitForm({ initialData = {}, onSubmit, submitButtonText
 
         <div className="pt-8">
           <div>
-            <h3 className="text-lg font-medium leading-6 text-gray-900">Scheduling</h3>
-            <p className="mt-1 text-sm text-gray-500">When will you practice this habit?</p>
+            <h3 className="text-lg font-medium leading-6 text-foreground">Scheduling</h3>
+            <p className="mt-1 text-sm text-muted-foreground">When will you practice this habit?</p>
           </div>
 
           <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
             <div className="sm:col-span-3">
-              <label htmlFor="frequency" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="frequency" className="block text-sm font-medium text-foreground">
                 Frequency <span className="text-red-500">*</span>
               </label>
               <div className="mt-1">
@@ -220,7 +220,7 @@ export default function HabitForm({ initialData = {}, onSubmit, submitButtonText
                   name="frequency"
                   value={formData.frequency}
                   onChange={handleChange}
-                  className="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                  className="shadow-sm focus:ring-primary focus:border-primary block w-full sm:text-sm border-border rounded-md bg-background"
                 >
                   <option value="daily">Daily</option>
                   <option value="weekly">Weekly</option>
@@ -230,7 +230,7 @@ export default function HabitForm({ initialData = {}, onSubmit, submitButtonText
             </div>
 
             <div className="sm:col-span-3">
-              <label htmlFor="startDate" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="startDate" className="block text-sm font-medium text-foreground">
                 Start Date <span className="text-red-500">*</span>
               </label>
               <div className="mt-1">
@@ -241,7 +241,7 @@ export default function HabitForm({ initialData = {}, onSubmit, submitButtonText
                   min={new Date().toISOString().split('T')[0]}
                   value={formData.startDate}
                   onChange={handleChange}
-                  className="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                  className="shadow-sm focus:ring-primary focus:border-primary block w-full sm:text-sm border-border rounded-md bg-background"
                 />
               </div>
             </div>
@@ -249,7 +249,7 @@ export default function HabitForm({ initialData = {}, onSubmit, submitButtonText
             {formData.frequency === 'specific-days' && (
               <div className="sm:col-span-6">
                 <fieldset>
-                  <legend className="block text-sm font-medium text-gray-700 mb-2">Select Days <span className="text-red-500">*</span></legend>
+                  <legend className="block text-sm font-medium text-foreground mb-2">Select Days <span className="text-red-500">*</span></legend>
                   <div className="grid grid-cols-2 sm:grid-cols-7 gap-2">
                     {['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].map((day) => (
                       <div key={day} className="flex items-center">
@@ -259,9 +259,9 @@ export default function HabitForm({ initialData = {}, onSubmit, submitButtonText
                           type="checkbox"
                           checked={formData.specificDays[day]}
                           onChange={handleChange}
-                          className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                          className="h-4 w-4 text-primary focus:ring-primary border-border rounded"
                         />
-                        <label htmlFor={`day-${day}`} className="ml-2 block text-sm text-gray-700 capitalize">
+                        <label htmlFor={`day-${day}`} className="ml-2 block text-sm text-foreground capitalize">
                           {day.slice(0, 3)}
                         </label>
                       </div>
@@ -277,7 +277,7 @@ export default function HabitForm({ initialData = {}, onSubmit, submitButtonText
             )}
 
             <div className="sm:col-span-3">
-              <label htmlFor="reminderTime" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="reminderTime" className="block text-sm font-medium text-foreground">
                 Reminder Time (Optional)
               </label>
               <div className="mt-1">
@@ -287,13 +287,13 @@ export default function HabitForm({ initialData = {}, onSubmit, submitButtonText
                   id="reminderTime"
                   value={formData.reminderTime}
                   onChange={handleChange}
-                  className="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                  className="shadow-sm focus:ring-primary focus:border-primary block w-full sm:text-sm border-border rounded-md bg-background"
                 />
               </div>
             </div>
 
             <div className="sm:col-span-3">
-              <label htmlFor="color" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="color" className="block text-sm font-medium text-foreground">
                 Color
               </label>
               <div className="mt-1">
@@ -302,7 +302,7 @@ export default function HabitForm({ initialData = {}, onSubmit, submitButtonText
                   name="color"
                   value={formData.color}
                   onChange={handleChange}
-                  className="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                  className="shadow-sm focus:ring-primary focus:border-primary block w-full sm:text-sm border-border rounded-md bg-background"
                 >
                   {colorOptions.map((color) => (
                     <option key={color.value} value={color.value}>
@@ -317,13 +317,13 @@ export default function HabitForm({ initialData = {}, onSubmit, submitButtonText
 
         <div className="pt-8">
           <div>
-            <h3 className="text-lg font-medium leading-6 text-gray-900">Tracking</h3>
-            <p className="mt-1 text-sm text-gray-500">How would you like to track this habit?</p>
+            <h3 className="text-lg font-medium leading-6 text-foreground">Tracking</h3>
+            <p className="mt-1 text-sm text-muted-foreground">How would you like to track this habit?</p>
           </div>
 
           <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
             <div className="sm:col-span-3">
-              <label htmlFor="trackingType" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="trackingType" className="block text-sm font-medium text-foreground">
                 Tracking Type
               </label>
               <div className="mt-1">
@@ -332,7 +332,7 @@ export default function HabitForm({ initialData = {}, onSubmit, submitButtonText
                   name="trackingType"
                   value={formData.trackingType}
                   onChange={handleChange}
-                  className="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                  className="shadow-sm focus:ring-primary focus:border-primary block w-full sm:text-sm border-border rounded-md bg-background"
                 >
                   <option value="binary">Yes/No (Did it or didn't)</option>
                   <option value="numeric">Numeric (e.g., minutes, pages)</option>
@@ -343,7 +343,7 @@ export default function HabitForm({ initialData = {}, onSubmit, submitButtonText
             {formData.trackingType !== 'binary' && (
               <>
                 <div className="sm:col-span-1">
-                  <label htmlFor="targetValue" className="block text-sm font-medium text-gray-700">
+                  <label htmlFor="targetValue" className="block text-sm font-medium text-foreground">
                     Target <span className="text-red-500">*</span>
                   </label>
                   <div className="mt-1">
@@ -354,7 +354,7 @@ export default function HabitForm({ initialData = {}, onSubmit, submitButtonText
                       id="targetValue"
                       value={formData.targetValue}
                       onChange={handleChange}
-                      className="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                      className="shadow-sm focus:ring-primary focus:border-primary block w-full sm:text-sm border-border rounded-md bg-background"
                     />
                   </div>
                   {touched.targetValue && formData.targetValue <= 0 && (
@@ -363,7 +363,7 @@ export default function HabitForm({ initialData = {}, onSubmit, submitButtonText
                 </div>
 
                 <div className="sm:col-span-2">
-                  <label htmlFor="unit" className="block text-sm font-medium text-gray-700">
+                  <label htmlFor="unit" className="block text-sm font-medium text-foreground">
                     Unit <span className="text-red-500">*</span>
                   </label>
                   <div className="mt-1">
@@ -373,7 +373,7 @@ export default function HabitForm({ initialData = {}, onSubmit, submitButtonText
                       id="unit"
                       value={formData.unit}
                       onChange={handleChange}
-                      className="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                      className="shadow-sm focus:ring-primary focus:border-primary block w-full sm:text-sm border-border rounded-md bg-background"
                       placeholder="e.g., minutes, pages, steps"
                     />
                   </div>
@@ -410,14 +410,14 @@ export default function HabitForm({ initialData = {}, onSubmit, submitButtonText
             <button
               type="button"
               onClick={onCancel}
-              className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              className="px-4 py-2 border border-border rounded-md shadow-sm text-sm font-medium text-foreground bg-background hover:bg-muted focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
             >
               Cancel
             </button>
           )}
           <button
             type="submit"
-            className="px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150"
+            className="px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-primary-foreground bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition duration-150"
           >
             {submitButtonText}
           </button>

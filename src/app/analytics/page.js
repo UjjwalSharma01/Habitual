@@ -123,7 +123,7 @@ export default function Analytics() {
     return (
       <AppLayout>
         <div className="flex items-center justify-center min-h-[60vh]">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
         </div>
       </AppLayout>
     );
@@ -131,13 +131,13 @@ export default function Analytics() {
 
   return (
     <AppLayout>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="md:flex md:items-center md:justify-between mb-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 md:py-8">
+        <div className="flex flex-col mb-6 sm:mb-8">
           <div className="flex-1 min-w-0">
-            <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl">
+            <h2 className="text-xl font-bold leading-7 text-foreground sm:text-2xl md:text-3xl">
               Your Analytics
             </h2>
-            <p className="mt-1 text-sm text-gray-500">
+            <p className="mt-1 text-sm text-muted-foreground">
               Track your habits progress and consistency
             </p>
           </div>
@@ -149,19 +149,19 @@ export default function Analytics() {
           </div>
         )}
 
-        <div className="bg-white shadow overflow-hidden sm:rounded-lg">
-          <div className="px-4 py-5 sm:px-6 flex flex-wrap items-center justify-between">
+        <div className="shadow overflow-hidden sm:rounded-lg bg-card-background text-card-foreground">
+          <div className="px-4 py-4 sm:py-5 sm:px-6 flex flex-col sm:flex-row sm:flex-wrap items-start sm:items-center justify-between gap-2">
             <div>
-              <h3 className="text-lg leading-6 font-medium text-gray-900">Activity Heatmap</h3>
-              <p className="mt-1 max-w-2xl text-sm text-gray-500">Visualize your habits consistency</p>
+              <h3 className="text-lg leading-6 font-medium text-foreground">Activity Heatmap</h3>
+              <p className="mt-1 max-w-2xl text-sm text-muted-foreground">Visualize your habits consistency</p>
             </div>
             
-            <div className="mt-3 sm:mt-0">
+            <div className="w-full sm:w-auto mt-2 sm:mt-0">
               <select
                 id="habitSelect"
                 value={selectedHabit}
                 onChange={(e) => setSelectedHabit(e.target.value)}
-                className="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+                className="block w-full pl-3 pr-10 py-2 text-base rounded-md focus:outline-none focus:ring-primary focus:border-primary text-sm border-border bg-background text-foreground"
               >
                 <option value="all">All Habits</option>
                 {habits.map(habit => (
@@ -173,10 +173,10 @@ export default function Analytics() {
             </div>
           </div>
 
-          <div className="border-t border-gray-200">
+          <div className="border-t border-border">
             {loadingData ? (
-              <div className="px-4 py-12 text-center text-gray-500">
-                <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500 mx-auto"></div>
+              <div className="px-4 py-12 text-center text-muted-foreground">
+                <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary mx-auto"></div>
                 <p className="mt-2">Loading your analytics...</p>
               </div>
             ) : (
