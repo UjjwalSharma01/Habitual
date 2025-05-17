@@ -61,9 +61,9 @@ export default function DashboardRecommendations({ habits }) {
   
   if (loading) {
     return (
-      <div className="bg-card rounded-lg shadow-sm p-4 animate-pulse">
+      <div className="bg-card rounded-lg shadow-sm p-4 animate-pulse h-full">
         <div className="h-5 bg-muted rounded w-1/3 mb-4"></div>
-        <div className="space-y-3">
+        <div className="space-y-3 mt-4">
           <div className="h-20 bg-muted rounded"></div>
           <div className="h-20 bg-muted rounded"></div>
         </div>
@@ -73,9 +73,9 @@ export default function DashboardRecommendations({ habits }) {
   
   if (recommendations.length === 0) {
     return (
-      <div className="bg-card rounded-lg shadow-sm p-4">
+      <div className="bg-card rounded-lg shadow-sm p-4 h-full">
         <h3 className="font-medium text-base mb-2">Personalized Insights</h3>
-        <div className="p-4 text-center border rounded-lg bg-muted/30">
+        <div className="p-4 text-center border rounded-lg bg-muted/30 mt-4">
           <p className="text-sm text-muted-foreground">
             Keep tracking your habits to receive personalized recommendations.
           </p>

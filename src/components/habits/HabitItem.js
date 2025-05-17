@@ -190,8 +190,8 @@ export default function HabitItem({ habit }) {
   const currentStreak = calculateStreak();
   
   return (
-    <li className="px-3 py-3 sm:px-6 sm:py-4 transition-colors duration-200 hover:bg-muted">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+    <li className="rounded-lg transition-colors duration-200 hover:bg-muted bg-card">
+      <div className="px-3 py-3 sm:px-6 sm:py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
         <div className="flex items-center">
           <button 
             onClick={handleCheckIn}

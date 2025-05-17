@@ -27,34 +27,34 @@ export default function HabitList({ habits }) {
 
   return (
     <div>
-      <div className="border-b border-border">
-        <nav className="flex -mb-px">
+      <div className="bg-card">
+        <nav className="flex">
           <button
             onClick={() => setFilter('all')}
-            className={`w-1/3 py-2 sm:py-4 px-1 text-center border-b-2 font-medium text-xs sm:text-sm ${
+            className={`w-1/3 py-3 sm:py-4 px-1 text-center border-b-2 font-medium text-xs sm:text-sm ${
               filter === 'all'
-                ? 'border-primary text-primary'
-                : 'border-transparent text-muted-foreground hover:text-foreground hover:border-border'
+                ? 'border-primary text-primary bg-muted/30'
+                : 'border-transparent text-muted-foreground hover:text-foreground hover:bg-muted/20'
             }`}
           >
             All Habits
           </button>
           <button
             onClick={() => setFilter('active')}
-            className={`w-1/3 py-2 sm:py-4 px-1 text-center border-b-2 font-medium text-xs sm:text-sm ${
+            className={`w-1/3 py-3 sm:py-4 px-1 text-center border-b-2 font-medium text-xs sm:text-sm ${
               filter === 'active'
-                ? 'border-primary text-primary'
-                : 'border-transparent text-muted-foreground hover:text-foreground hover:border-border'
+                ? 'border-primary text-primary bg-muted/30'
+                : 'border-transparent text-muted-foreground hover:text-foreground hover:bg-muted/20'
             }`}
           >
             Active
           </button>
           <button
             onClick={() => setFilter('completed')}
-            className={`w-1/3 py-2 sm:py-4 px-1 text-center border-b-2 font-medium text-xs sm:text-sm ${
+            className={`w-1/3 py-3 sm:py-4 px-1 text-center border-b-2 font-medium text-xs sm:text-sm ${
               filter === 'completed'
-                ? 'border-primary text-primary'
-                : 'border-transparent text-muted-foreground hover:text-foreground hover:border-border'
+                ? 'border-primary text-primary bg-muted/30'
+                : 'border-transparent text-muted-foreground hover:text-foreground hover:bg-muted/20'
             }`}
           >
             Completed
@@ -63,7 +63,7 @@ export default function HabitList({ habits }) {
       </div>
       
       {/* Tracking type filter */}
-      <div className="py-2 sm:py-3 px-3 sm:px-4 flex flex-wrap sm:flex-nowrap items-center justify-between sm:justify-end border-b border-border">
+      <div className="py-3 sm:py-4 px-3 sm:px-4 flex flex-wrap sm:flex-nowrap items-center justify-between sm:justify-end bg-muted/30">
         <div className="w-full sm:w-auto order-2 sm:order-none mt-2 sm:mt-0">
           <div className="flex flex-wrap sm:flex-nowrap items-center">
             <span className="text-xs sm:text-sm text-muted-foreground mr-2 whitespace-nowrap mb-1 sm:mb-0">Tracking Type:</span>
@@ -85,7 +85,7 @@ export default function HabitList({ habits }) {
         </p>
       </div>
 
-      <ul className="divide-y divide-border">
+      <ul className="space-y-1">
         {filteredHabits.map(habit => (
           <HabitItem key={habit.id} habit={habit} />
         ))}

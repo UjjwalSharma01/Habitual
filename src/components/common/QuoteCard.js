@@ -62,9 +62,10 @@ export default function QuoteCard() {
 
   if (loading) {
     return (
-      <div className="shadow overflow-hidden rounded-lg bg-card-background">
-        <div className="px-3 py-4 sm:px-4 sm:py-5">
-          <div className="animate-pulse flex space-x-4">
+      <div className="shadow-sm rounded-lg bg-card h-full">
+        <div className="px-4 py-4 sm:px-5 sm:py-6 h-full">
+          <div className="h-5 bg-muted rounded w-1/3 mb-4"></div>
+          <div className="animate-pulse flex space-x-4 mt-4">
             <div className="flex-1 space-y-4 py-1">
               <div className="h-4 rounded w-3/4 bg-muted"></div>
               <div className="h-4 rounded w-1/2 bg-muted"></div>
@@ -76,9 +77,10 @@ export default function QuoteCard() {
   }
 
   return (
-    <div className="bg-gradient-to-r from-blue-500 to-indigo-600 shadow overflow-hidden rounded-lg">
-      <div className="px-3 py-4 sm:px-5 sm:py-6 text-white">
-        <div className="flex items-start">
+    <div className="bg-gradient-to-r from-blue-500 to-indigo-600 shadow-sm rounded-lg h-full">
+      <div className="px-4 py-4 sm:px-5 sm:py-6 text-white h-full">
+        <h3 className="font-medium text-base mb-2 text-white opacity-90">Daily Inspiration</h3>
+        <div className="flex items-start mt-4">
           <svg className="h-6 w-6 sm:h-8 sm:w-8 mr-2 sm:mr-3 flex-shrink-0 text-white opacity-80" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
           </svg>

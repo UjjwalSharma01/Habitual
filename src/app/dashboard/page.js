@@ -28,8 +28,8 @@ export default function Dashboard() {
       return;
     }
     
-    // Redirect to onboarding if not completed
-    if (!loadingOnboarding && user && !onboardingState.completed) {
+    // Only redirect to onboarding if explicitly completed is false (not if it's still loading)
+    if (!loadingOnboarding && user && onboardingState.completed === false) {
       router.push('/onboarding');
       return;
     }
@@ -138,8 +138,8 @@ export default function Dashboard() {
         )}
 
         <div className="mt-8">
-          <div className="shadow overflow-hidden sm:rounded-lg bg-card-background text-card-foreground">
-            <div className="px-4 py-5 sm:px-6">
+          <div className="shadow-sm overflow-hidden sm:rounded-lg bg-background text-foreground">
+            <div className="px-4 py-5 sm:px-6 bg-card rounded-t-lg">
               <h3 className="text-lg leading-6 font-medium text-foreground">Your Habits</h3>
               <p className="mt-1 max-w-2xl text-sm text-muted-foreground">Track your progress and build consistency</p>
             </div>
@@ -150,7 +150,7 @@ export default function Dashboard() {
                 </div>
               </div>
             )}
-            <div className="border-t border-border">
+            <div className="mt-1">
               {loadingHabits ? (
                 <div className="px-4 py-12 text-center text-muted-foreground">
                   <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary mx-auto"></div>

@@ -88,8 +88,8 @@ export default function PrimaryGoalStep() {
         className="space-y-8"
       >
         <div className="text-center space-y-3">
-          <h2 className="text-3xl font-bold tracking-tight text-gray-900">What&apos;s your main focus?</h2>
-          <p className="text-lg text-gray-600 max-w-lg mx-auto">
+          <h2 className="text-3xl font-bold tracking-tight text-foreground">What&apos;s your main focus?</h2>
+          <p className="text-lg text-muted-foreground max-w-lg mx-auto">
             We&apos;ll help you build habits that support your primary goal.
           </p>
         </div>
@@ -105,18 +105,18 @@ export default function PrimaryGoalStep() {
               transition={{ duration: 0.3, delay: index * 0.1 }}
               className={`relative cursor-pointer rounded-xl border-2 p-6 flex flex-col items-center text-center transition-all duration-200 ${
                 selectedGoal === goal.id
-                  ? "border-blue-600 bg-blue-50"
-                  : "border-gray-200 hover:border-gray-300"
+                  ? "border-primary bg-accent"
+                  : "border-border hover:border-muted-foreground/30"
               }`}
               onClick={() => setSelectedGoal(goal.id)}
             >
               <div className={`p-3 rounded-full ${
-                selectedGoal === goal.id ? "bg-blue-100 text-blue-600" : "bg-gray-100 text-gray-500"
+                selectedGoal === goal.id ? "bg-accent text-primary" : "bg-muted text-muted-foreground"
               }`}>
                 {goal.icon}
               </div>
               <h3 className={`mt-4 font-medium ${
-                selectedGoal === goal.id ? "text-blue-700" : "text-gray-900"
+                selectedGoal === goal.id ? "text-primary" : "text-foreground"
               }`}>
                 {goal.title}
               </h3>
@@ -124,7 +124,7 @@ export default function PrimaryGoalStep() {
                 <motion.div
                   initial={{ opacity: 0, scale: 0.5 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="absolute top-3 right-3 text-blue-600"
+                  className="absolute top-3 right-3 text-primary"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
@@ -138,7 +138,7 @@ export default function PrimaryGoalStep() {
         <div className="flex justify-between pt-6">
           <button
             onClick={previousStep}
-            className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            className="inline-flex items-center px-4 py-2 border border-border shadow-sm text-sm font-medium rounded-md text-foreground bg-background hover:bg-muted focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
           >
             Back
           </button>
@@ -147,8 +147,8 @@ export default function PrimaryGoalStep() {
             disabled={!selectedGoal}
             className={`inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white ${
               selectedGoal
-                ? "bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                : "bg-blue-300 cursor-not-allowed"
+                ? "bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+                : "bg-primary/50 cursor-not-allowed"
             }`}
           >
             Continue
