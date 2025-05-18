@@ -72,8 +72,8 @@ export default function FirstHabitStep() {
       {!createdHabit ? (
         <div className="space-y-6">
           <div>
-            <h2 className="text-2xl font-bold tracking-tight text-gray-900">Define Your First Habit</h2>
-            <p className="mt-1 text-gray-500">
+            <h2 className="text-2xl font-bold tracking-tight text-foreground">Define Your First Habit</h2>
+            <p className="mt-1 text-muted-foreground">
               Be specific about what you want to achieve and when.
             </p>
           </div>
@@ -114,20 +114,20 @@ export default function FirstHabitStep() {
           </div>
           
           <div className="space-y-3">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900">
+            <h2 className="text-3xl font-bold tracking-tight text-foreground">
               Habit Created Successfully! ✨
             </h2>
-            <p className="text-xl text-gray-600 max-w-md mx-auto">
+            <p className="text-xl text-muted-foreground max-w-md mx-auto">
               You&apos;ve added <span className="font-semibold">{createdHabit.name}</span> to your habits.
             </p>
           </div>
           
-          <div className="bg-blue-50 p-6 rounded-xl border border-blue-100 max-w-xl mx-auto">
-            <h3 className="font-medium text-blue-800">What would you like to do next?</h3>
+          <div className="bg-accent p-6 rounded-xl border border-accent-border max-w-xl mx-auto">
+            <h3 className="font-medium text-primary">What would you like to do next?</h3>
             <div className="mt-5 flex flex-col sm:flex-row gap-4 justify-center">
               <button
                 onClick={handleAddAnother}
-                className="inline-flex items-center justify-center px-6 py-3 border border-blue-300 rounded-md shadow-sm text-base font-medium text-blue-700 bg-white hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                className="inline-flex items-center justify-center px-6 py-3 border border-border rounded-md shadow-sm text-base font-medium text-foreground bg-background hover:bg-muted focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -136,7 +136,7 @@ export default function FirstHabitStep() {
               </button>
               <button
                 onClick={handleComplete}
-                className="inline-flex items-center justify-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                className="inline-flex items-center justify-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />

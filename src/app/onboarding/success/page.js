@@ -30,7 +30,7 @@ export default function OnboardingSuccess() {
     return (
       <AppLayout>
         <div className="flex items-center justify-center min-h-[80vh]">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
         </div>
       </AppLayout>
     );
@@ -38,7 +38,7 @@ export default function OnboardingSuccess() {
 
   return (
     <AppLayout>
-      <div className="bg-gradient-to-b from-white to-blue-50 min-h-[80vh] flex items-center justify-center">
+      <div className="bg-background min-h-[80vh] flex items-center justify-center">
         <div className="max-w-2xl mx-auto px-4 py-16 sm:py-24 sm:px-6 lg:px-8 text-center">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -54,7 +54,7 @@ export default function OnboardingSuccess() {
             
             <div>
               <motion.h1 
-                className="text-4xl font-bold text-gray-900"
+                className="text-4xl font-bold text-foreground"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3, duration: 0.5 }}
@@ -63,7 +63,7 @@ export default function OnboardingSuccess() {
               </motion.h1>
               
               <motion.p 
-                className="mt-4 text-xl text-gray-600"
+                className="mt-4 text-xl text-muted-foreground"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5, duration: 0.5 }}
@@ -76,17 +76,17 @@ export default function OnboardingSuccess() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.7, duration: 0.5 }}
-              className="bg-white p-6 rounded-lg shadow-md"
+              className="bg-card p-6 rounded-lg shadow-md border border-border"
             >
-              <p className="text-gray-700">
+              <p className="text-card-foreground">
                 Welcome, <span className="font-semibold">{user.displayName || 'User'}</span>! Your personalized dashboard is ready.
               </p>
-              <div className="mt-2 text-sm text-gray-500">
+              <div className="mt-2 text-sm text-muted-foreground">
                 Redirecting you to your dashboard in a few seconds...
               </div>
-              <div className="mt-4 w-full bg-gray-200 rounded-full h-1.5">
+              <div className="mt-4 w-full bg-muted rounded-full h-1.5">
                 <motion.div
-                  className="bg-blue-600 h-1.5 rounded-full"
+                  className="bg-primary h-1.5 rounded-full"
                   initial={{ width: '0%' }}
                   animate={{ width: '100%' }}
                   transition={{ duration: 5, ease: 'linear' }}
@@ -101,7 +101,7 @@ export default function OnboardingSuccess() {
             >
               <button
                 onClick={() => router.push('/dashboard')}
-                className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
               >
                 Go to Dashboard Now
               </button>
