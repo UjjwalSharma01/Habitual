@@ -1,1 +1,472 @@
-if(!self.define){let e,s={};const a=(a,n)=>(a=new URL(a+".js",n).href,s[a]||new Promise((s=>{if("document"in self){const e=document.createElement("script");e.src=a,e.onload=s,document.head.appendChild(e)}else e=a,importScripts(a),s()})).then((()=>{let e=s[a];if(!e)throw new Error(`Module ${a} didn’t register its module`);return e})));self.define=(n,i)=>{const t=e||("document"in self?document.currentScript.src:"")||location.href;if(s[t])return;let c={};const r=e=>a(e,t),o={module:{uri:t},exports:c,require:r};s[t]=Promise.all(n.map((e=>o[e]||r(e)))).then((e=>(i(...e),c)))}}define(["./workbox-f63dece8"],(function(e){"use strict";importScripts("fallback-2uHDYKsX3E0FV5eCh5FZI.js"),self.skipWaiting(),e.clientsClaim(),e.precacheAndRoute([{url:"/_next/app-build-manifest.json",revision:"f56c0b398f564d0506a8055a1bd4030f"},{url:"/_next/dynamic-css-manifest.json",revision:"d751713988987e9331980363e24189ce"},{url:"/_next/static/2uHDYKsX3E0FV5eCh5FZI/_buildManifest.js",revision:"49c3d0a519f50930ad7f8a0f44faa1a5"},{url:"/_next/static/2uHDYKsX3E0FV5eCh5FZI/_ssgManifest.js",revision:"b6652df95db52feb4daf4eca35380933"},{url:"/_next/static/chunks/app/_not-found/page-62100f17274841b7.js",revision:"2uHDYKsX3E0FV5eCh5FZI"},{url:"/_next/static/chunks/app/analytics/page-26d4a83eca619949.js",revision:"2uHDYKsX3E0FV5eCh5FZI"},{url:"/_next/static/chunks/app/api/habits/sync/route-43d546eb6ec811b1.js",revision:"2uHDYKsX3E0FV5eCh5FZI"},{url:"/_next/static/chunks/app/api/push/subscribe/route-255981004e79ca46.js",revision:"2uHDYKsX3E0FV5eCh5FZI"},{url:"/_next/static/chunks/app/api/push/vapid-public-key/route-2d64e9ce35959dcf.js",revision:"2uHDYKsX3E0FV5eCh5FZI"},{url:"/_next/static/chunks/app/auth/login/page-2ffc985e0497e647.js",revision:"2uHDYKsX3E0FV5eCh5FZI"},{url:"/_next/static/chunks/app/auth/register/page-73dafc9e1d088205.js",revision:"2uHDYKsX3E0FV5eCh5FZI"},{url:"/_next/static/chunks/app/dashboard/page-3a799db4d5034b63.js",revision:"2uHDYKsX3E0FV5eCh5FZI"},{url:"/_next/static/chunks/app/habits/%5Bid%5D/edit/page-674c2e3a248bd842.js",revision:"2uHDYKsX3E0FV5eCh5FZI"},{url:"/_next/static/chunks/app/habits/%5Bid%5D/page-fae9cc3eaa683582.js",revision:"2uHDYKsX3E0FV5eCh5FZI"},{url:"/_next/static/chunks/app/habits/new/page-0d33bb0fc7498442.js",revision:"2uHDYKsX3E0FV5eCh5FZI"},{url:"/_next/static/chunks/app/layout-f3b1579a40370698.js",revision:"2uHDYKsX3E0FV5eCh5FZI"},{url:"/_next/static/chunks/app/offline/page-82c106ec0a8d94da.js",revision:"2uHDYKsX3E0FV5eCh5FZI"},{url:"/_next/static/chunks/app/onboarding/page-e0b17b17fdba6fb8.js",revision:"2uHDYKsX3E0FV5eCh5FZI"},{url:"/_next/static/chunks/app/onboarding/success/page-3904da53fa05894e.js",revision:"2uHDYKsX3E0FV5eCh5FZI"},{url:"/_next/static/chunks/app/page-23d31488423f7608.js",revision:"2uHDYKsX3E0FV5eCh5FZI"},{url:"/_next/static/chunks/app/profile/page-dd8d0d4277c67f2d.js",revision:"2uHDYKsX3E0FV5eCh5FZI"},{url:"/_next/static/chunks/app/test-firebase/page-40e87cc69d95d3f9.js",revision:"2uHDYKsX3E0FV5eCh5FZI"},{url:"/_next/static/chunks/common-f380e41c2f69554a.js",revision:"2uHDYKsX3E0FV5eCh5FZI"},{url:"/_next/static/chunks/components-525dc7d6c7a30a7c.js",revision:"2uHDYKsX3E0FV5eCh5FZI"},{url:"/_next/static/chunks/main-046487245eb23e11.js",revision:"2uHDYKsX3E0FV5eCh5FZI"},{url:"/_next/static/chunks/main-app-bc16b602e82a493d.js",revision:"2uHDYKsX3E0FV5eCh5FZI"},{url:"/_next/static/chunks/pages/_app-67e319a0351020aa.js",revision:"2uHDYKsX3E0FV5eCh5FZI"},{url:"/_next/static/chunks/pages/_error-a2446cb152493f85.js",revision:"2uHDYKsX3E0FV5eCh5FZI"},{url:"/_next/static/chunks/polyfills-42372ed130431b0a.js",revision:"846118c33b2c0e922d7b3a7676f81f6f"},{url:"/_next/static/chunks/vendor-757d9acc6857a002.js",revision:"2uHDYKsX3E0FV5eCh5FZI"},{url:"/_next/static/chunks/webpack-2482c14d63d5b22f.js",revision:"2uHDYKsX3E0FV5eCh5FZI"},{url:"/_next/static/css/2c2629a3bf62df2c.css",revision:"2c2629a3bf62df2c"},{url:"/_next/static/media/569ce4b8f30dc480-s.p.woff2",revision:"ef6cefb32024deac234e82f932a95cbd"},{url:"/_next/static/media/747892c23ea88013-s.woff2",revision:"a0761690ccf4441ace5cec893b82d4ab"},{url:"/_next/static/media/8d697b304b401681-s.woff2",revision:"cc728f6c0adb04da0dfcb0fc436a8ae5"},{url:"/_next/static/media/93f479601ee12b01-s.p.woff2",revision:"da83d5f06d825c5ae65b7cca706cb312"},{url:"/_next/static/media/9610d9e46709d722-s.woff2",revision:"7b7c0ef93df188a852344fc272fc096b"},{url:"/_next/static/media/ba015fad6dcf6784-s.woff2",revision:"8ea4f719af3312a055caf09f34c89a77"},{url:"/file.svg",revision:"d09f95206c3fa0bb9bd9fefabfd0ea71"},{url:"/globe.svg",revision:"2aaafa6a49b6563925fe440891e32717"},{url:"/icons/offline-image.png",revision:"2uHDYKsX3E0FV5eCh5FZI"},{url:"/manifest.json",revision:"77f15da60d3d6e165c42a10a884b9d6d"},{url:"/next.svg",revision:"8e061864f388b47f33a1c3780831193e"},{url:"/offline",revision:"2uHDYKsX3E0FV5eCh5FZI"},{url:"/screenshots/dashboard.png",revision:"d41d8cd98f00b204e9800998ecf8427e"},{url:"/screenshots/habits.png",revision:"d41d8cd98f00b204e9800998ecf8427e"},{url:"/service-worker-test.html",revision:"9607a464e0e6015d5e47ba55714e6107"},{url:"/sw-new.js",revision:"ef828517baf552aa78b895d015e96aa8"},{url:"/sw.js.new",revision:"d41d8cd98f00b204e9800998ecf8427e"},{url:"/vercel.svg",revision:"c0af2f507b369b085b35ef4bbe3bcf1e"},{url:"/window.svg",revision:"a2760511c65806022ad20adf74370ff3"}],{ignoreURLParametersMatching:[]}),e.cleanupOutdatedCaches(),e.registerRoute("/",new e.NetworkFirst({cacheName:"start-url",plugins:[{cacheWillUpdate:async({request:e,response:s,event:a,state:n})=>s&&"opaqueredirect"===s.type?new Response(s.body,{status:200,statusText:"OK",headers:s.headers}):s},{handlerDidError:async({request:e})=>self.fallback(e)}]}),"GET"),e.registerRoute(/^https:\/\/fonts\.(?:gstatic)\.com\/.*/i,new e.CacheFirst({cacheName:"google-fonts-webfonts",plugins:[new e.ExpirationPlugin({maxEntries:4,maxAgeSeconds:31536e3}),{handlerDidError:async({request:e})=>self.fallback(e)}]}),"GET"),e.registerRoute(/^https:\/\/fonts\.(?:googleapis)\.com\/.*/i,new e.StaleWhileRevalidate({cacheName:"google-fonts-stylesheets",plugins:[new e.ExpirationPlugin({maxEntries:4,maxAgeSeconds:604800}),{handlerDidError:async({request:e})=>self.fallback(e)}]}),"GET"),e.registerRoute(/\.(?:eot|otf|ttc|ttf|woff|woff2|font.css)$/i,new e.StaleWhileRevalidate({cacheName:"static-font-assets",plugins:[new e.ExpirationPlugin({maxEntries:4,maxAgeSeconds:604800}),{handlerDidError:async({request:e})=>self.fallback(e)}]}),"GET"),e.registerRoute(/\.(?:jpg|jpeg|gif|png|svg|ico|webp)$/i,new e.StaleWhileRevalidate({cacheName:"static-image-assets",plugins:[new e.ExpirationPlugin({maxEntries:64,maxAgeSeconds:86400}),{handlerDidError:async({request:e})=>self.fallback(e)}]}),"GET"),e.registerRoute(/\/_next\/image\?url=.+$/i,new e.StaleWhileRevalidate({cacheName:"next-image",plugins:[new e.ExpirationPlugin({maxEntries:64,maxAgeSeconds:86400}),{handlerDidError:async({request:e})=>self.fallback(e)}]}),"GET"),e.registerRoute(/\.(?:mp3|wav|ogg)$/i,new e.CacheFirst({cacheName:"static-audio-assets",plugins:[new e.RangeRequestsPlugin,new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:86400}),{handlerDidError:async({request:e})=>self.fallback(e)}]}),"GET"),e.registerRoute(/\.(?:js)$/i,new e.StaleWhileRevalidate({cacheName:"static-js-assets",plugins:[new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:86400}),{handlerDidError:async({request:e})=>self.fallback(e)}]}),"GET"),e.registerRoute(/\.(?:css|less)$/i,new e.StaleWhileRevalidate({cacheName:"static-style-assets",plugins:[new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:86400}),{handlerDidError:async({request:e})=>self.fallback(e)}]}),"GET"),e.registerRoute(/\/_next\/data\/.+\/.+\.json$/i,new e.StaleWhileRevalidate({cacheName:"next-data",plugins:[new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:86400}),{handlerDidError:async({request:e})=>self.fallback(e)}]}),"GET"),e.registerRoute(/\/api\/.*$/i,new e.NetworkFirst({cacheName:"apis",networkTimeoutSeconds:10,plugins:[new e.ExpirationPlugin({maxEntries:16,maxAgeSeconds:86400}),{handlerDidError:async({request:e})=>self.fallback(e)}]}),"GET"),e.registerRoute(/.*/i,new e.NetworkFirst({cacheName:"others",networkTimeoutSeconds:10,plugins:[new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:86400}),{handlerDidError:async({request:e})=>self.fallback(e)}]}),"GET")}));
+// Habitual PWA Service Worker with Workbox
+// Service worker version: 2.0.1 - Removed all notification functionality
+
+// Import Workbox from CDN (will be injected at build time in production)
+importScripts('https://storage.googleapis.com/workbox-cdn/releases/6.5.4/workbox-sw.js');
+
+// Define cache version and names
+const CACHE_VERSION = 'v3';
+const CACHE_NAMES = {
+  static: `habitual-static-${CACHE_VERSION}`,
+  pages: `habitual-pages-${CACHE_VERSION}`,
+  images: `habitual-images-${CACHE_VERSION}`,
+  api: `habitual-api-${CACHE_VERSION}`,
+  fonts: `habitual-fonts-${CACHE_VERSION}`
+};
+
+// This is required to trigger the InstallEvent
+self.addEventListener('install', event => {
+  console.log('Service Worker installing.');
+  
+  // Skip waiting to ensure the new service worker activates immediately
+  self.skipWaiting();
+  
+  // Pre-cache the offline page during installation
+  event.waitUntil(
+    caches.open(CACHE_NAMES.pages).then(cache => {
+      return cache.add('/offline');
+    })
+  );
+});
+
+// This is required to ensure the service worker activates correctly
+self.addEventListener('activate', event => {
+  console.log('Service Worker activating.');
+  
+  // Clean up old caches on activation
+  event.waitUntil(
+    caches.keys().then(cacheNames => {
+      return Promise.all(
+        cacheNames.map(cacheName => {
+          // Delete any cache that doesn't match our current version
+          if (!Object.values(CACHE_NAMES).includes(cacheName)) {
+            console.log('Service Worker: Deleting old cache:', cacheName);
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    }).then(() => {
+      // Take control of all clients/pages immediately
+      return clients.claim();
+    })
+  );
+});
+
+// Add message event listener to handle messages from the client
+self.addEventListener('message', event => {
+  console.log('Service Worker: Message received', event.data);
+  
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+});
+
+// Precache static assets during installation
+workbox.precaching.precacheAndRoute(self.__WB_MANIFEST || []);
+
+// Cache page navigations (HTML) with a network-first strategy
+workbox.routing.registerRoute(
+  ({ request }) => request.mode === 'navigate',
+  new workbox.strategies.NetworkFirst({
+    cacheName: CACHE_NAMES.pages,
+    networkTimeoutSeconds: 3, // Fallback to cache if network takes > 3 seconds
+    plugins: [
+      new workbox.expiration.ExpirationPlugin({
+        maxEntries: 50,
+        maxAgeSeconds: 7 * 24 * 60 * 60, // 1 week
+        purgeOnQuotaError: true, // Automatically delete if quota is exceeded
+      }),
+    ],
+  })
+);
+
+// Cache images with a cache-first strategy
+workbox.routing.registerRoute(
+  ({ request }) => request.destination === 'image',
+  new workbox.strategies.CacheFirst({
+    cacheName: CACHE_NAMES.images,
+    plugins: [
+      new workbox.cacheableResponse.CacheableResponsePlugin({
+        statuses: [0, 200], // Cache opaque responses as well
+      }),
+      new workbox.expiration.ExpirationPlugin({
+        maxEntries: 100,
+        maxAgeSeconds: 30 * 24 * 60 * 60, // 30 days
+        purgeOnQuotaError: true,
+      }),
+    ],
+  })
+);
+
+// Cache fonts with a cache-first strategy (longer cache time)
+workbox.routing.registerRoute(
+  ({ request }) => request.destination === 'font',
+  new workbox.strategies.CacheFirst({
+    cacheName: CACHE_NAMES.fonts,
+    plugins: [
+      new workbox.cacheableResponse.CacheableResponsePlugin({
+        statuses: [0, 200],
+      }),
+      new workbox.expiration.ExpirationPlugin({
+        maxEntries: 20,
+        maxAgeSeconds: 60 * 24 * 60 * 60, // 60 days
+        purgeOnQuotaError: true,
+      }),
+    ],
+  })
+);
+
+// Cache JavaScript and CSS with a stale-while-revalidate strategy
+workbox.routing.registerRoute(
+  ({ request }) =>
+    request.destination === 'script' || request.destination === 'style',
+  new workbox.strategies.StaleWhileRevalidate({
+    cacheName: CACHE_NAMES.static,
+    plugins: [
+      new workbox.expiration.ExpirationPlugin({
+        maxEntries: 50,
+        maxAgeSeconds: 7 * 24 * 60 * 60, // 7 days
+        purgeOnQuotaError: true,
+      }),
+    ],
+  })
+);
+
+// Cache specific API endpoints using different strategies
+// Habit data - stale while revalidate for frequent updates
+workbox.routing.registerRoute(
+  ({ url }) => url.pathname.startsWith('/api/habits'),
+  new workbox.strategies.StaleWhileRevalidate({
+    cacheName: CACHE_NAMES.api,
+    plugins: [
+      new workbox.expiration.ExpirationPlugin({
+        maxEntries: 100,
+        maxAgeSeconds: 60 * 60, // 1 hour
+        purgeOnQuotaError: true,
+      }),
+    ],
+  })
+);
+
+// User data - network first with fast timeout for critical data
+workbox.routing.registerRoute(
+  ({ url }) => url.pathname.startsWith('/api/user'),
+  new workbox.strategies.NetworkFirst({
+    cacheName: CACHE_NAMES.api,
+    networkTimeoutSeconds: 2, // Fall back to cache after 2 seconds
+    plugins: [
+      new workbox.expiration.ExpirationPlugin({
+        maxEntries: 20,
+        maxAgeSeconds: 24 * 60 * 60, // 24 hours
+        purgeOnQuotaError: true,
+      }),
+    ],
+  })
+);
+
+// Default API handling
+workbox.routing.registerRoute(
+  ({ url }) => url.pathname.startsWith('/api/'),
+  new workbox.strategies.NetworkFirst({
+    cacheName: CACHE_NAMES.api,
+    plugins: [
+      new workbox.expiration.ExpirationPlugin({
+        maxEntries: 200,
+        maxAgeSeconds: 2 * 60 * 60, // 2 hours
+        purgeOnQuotaError: true,
+      }),
+    ],
+  })
+);
+
+// Handle offline fallback with custom responses based on request type
+workbox.routing.setCatchHandler(async ({ event, request }) => {
+  console.log(`Service Worker: Falling back to offline handler for: ${request.url}`);
+  
+  const destination = request.destination;
+  
+  // If it's a document/page request, return the offline page
+  if (destination === 'document') {
+    return caches.match('/offline') || Response.error();
+  }
+  
+  // If it's an image request, return a fallback image
+  if (destination === 'image') {
+    return caches.match('/icons/offline-image.png') || Response.error();
+  }
+  
+  // For API requests, return a JSON response indicating offline status
+  if (request.url.includes('/api/')) {
+    return new Response(
+      JSON.stringify({
+        success: false,
+        offline: true,
+        message: 'You are currently offline. Please try again when you have a network connection.'
+      }),
+      {
+        headers: { 'Content-Type': 'application/json' }
+      }
+    );
+  }
+  
+  // For everything else, return an error response
+  return Response.error();
+});
+
+// Listen for background sync events - for habit tracking syncing
+self.addEventListener('sync', event => {
+  console.log(`Service Worker: Background sync event: ${event.tag}`);
+  
+  if (event.tag === 'sync-habits') {
+    event.waitUntil(syncHabits());
+  } else if (event.tag === 'sync-user-settings') {
+    event.waitUntil(syncUserSettings());
+  }
+});
+
+// Function to sync habits when back online
+async function syncHabits() {
+  console.log('Service Worker: Syncing pending habits...');
+  const db = await openIndexedDB();
+  const pendingHabits = await getPendingHabits(db);
+  
+  // If there are no pending habits, return
+  if (!pendingHabits.length) {
+    console.log('Service Worker: No pending habits to sync');
+    return;
+  }
+
+  console.log(`Service Worker: Found ${pendingHabits.length} pending habits to sync`);
+  
+  try {
+    // Try to sync each habit with retry logic
+    let successCount = 0;
+    
+    await Promise.all(pendingHabits.map(async (habit) => {
+      // Try up to 3 times with exponential backoff
+      for (let attempt = 0; attempt < 3; attempt++) {
+        try {
+          const response = await fetch('/api/habits/sync', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-Sync-Timestamp': new Date().toISOString(),
+              'X-Device-ID': getDeviceId()
+            },
+            body: JSON.stringify(habit),
+          });
+
+          if (response.ok) {
+            // If successful, remove from pending
+            await removePendingHabit(db, habit.id);
+            successCount++;
+            break; // Exit retry loop if successful
+          } else {
+            // If server error, wait and retry
+            const waitTime = Math.pow(2, attempt) * 1000; // Exponential backoff
+            await new Promise(resolve => setTimeout(resolve, waitTime));
+          }
+        } catch (err) {
+          console.error(`Service Worker: Sync attempt ${attempt + 1} failed`, err);
+          if (attempt === 2) break; // Don't wait after the last attempt
+          
+          // Wait before retrying
+          const waitTime = Math.pow(2, attempt) * 1000;
+          await new Promise(resolve => setTimeout(resolve, waitTime));
+        }
+      }
+    }));
+    
+    console.log(`Service Worker: Sync completed. Synced ${successCount} of ${pendingHabits.length} habits`);
+    
+    // If we have a client, notify it about the sync results
+    const clients = await self.clients.matchAll();
+    clients.forEach(client => {
+      client.postMessage({
+        type: 'HABITS_SYNCED',
+        success: successCount > 0,
+        total: pendingHabits.length,
+        synced: successCount
+      });
+    });
+    
+  } catch (error) {
+    console.error('Service Worker: Error syncing habits:', error);
+  }
+}
+
+// Function to sync user settings when back online
+async function syncUserSettings() {
+  console.log('Service Worker: Syncing user settings...');
+  const db = await openIndexedDB();
+  
+  try {
+    // Get pending user settings from IndexedDB
+    const pendingSettings = await getPendingUserSettings(db);
+    
+    if (!pendingSettings || !pendingSettings.userId) {
+      console.log('Service Worker: No pending user settings to sync');
+      return;
+    }
+    
+    // Attempt to sync with the server
+    const response = await fetch('/api/user/settings', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(pendingSettings),
+    });
+    
+    if (response.ok) {
+      // Clear pending settings after successful sync
+      await clearPendingUserSettings(db);
+      console.log('Service Worker: User settings synced successfully');
+      
+      // Notify clients
+      const clients = await self.clients.matchAll();
+      clients.forEach(client => {
+        client.postMessage({
+          type: 'SETTINGS_SYNCED',
+          success: true
+        });
+      });
+    } else {
+      console.error('Service Worker: Failed to sync user settings, will retry later');
+    }
+  } catch (error) {
+    console.error('Service Worker: Error syncing user settings:', error);
+  }
+}
+
+// Helper function to generate or retrieve a persistent device ID
+function getDeviceId() {
+  let deviceId = localStorage.getItem('habitual-device-id');
+  
+  if (!deviceId) {
+    deviceId = `device_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`;
+    try {
+      localStorage.setItem('habitual-device-id', deviceId);
+    } catch (error) {
+      console.error('Could not save device ID to localStorage:', error);
+    }
+  }
+  
+  return deviceId;
+}
+
+// Helper function to open IndexedDB with version update handling
+function openIndexedDB() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open('HabitualDB', 2); // Increased version number to add new stores
+
+    request.onerror = () => reject(request.error);
+    request.onsuccess = () => resolve(request.result);
+
+    request.onupgradeneeded = (event) => {
+      const db = event.target.result;
+      const oldVersion = event.oldVersion;
+      
+      // Create object stores if they don't exist
+      if (oldVersion < 1) {
+        // Version 1 schema
+        if (!db.objectStoreNames.contains('pendingHabits')) {
+          db.createObjectStore('pendingHabits', { keyPath: 'id' });
+        }
+      }
+      
+      if (oldVersion < 2) {
+        // Version 2 schema additions
+        if (!db.objectStoreNames.contains('userSettings')) {
+          db.createObjectStore('userSettings', { keyPath: 'userId' });
+        }
+        
+        if (!db.objectStoreNames.contains('offlineActions')) {
+          const actionsStore = db.createObjectStore('offlineActions', { 
+            keyPath: 'id',
+            autoIncrement: true 
+          });
+          actionsStore.createIndex('actionType', 'actionType', { unique: false });
+          actionsStore.createIndex('timestamp', 'timestamp', { unique: false });
+        }
+      }
+    };
+  });
+}
+
+// Helper function to get pending habits
+function getPendingHabits(db) {
+  return new Promise((resolve, reject) => {
+    try {
+      const transaction = db.transaction('pendingHabits', 'readonly');
+      const store = transaction.objectStore('pendingHabits');
+      const request = store.getAll();
+
+      request.onerror = () => reject(request.error);
+      request.onsuccess = () => resolve(request.result || []);
+    } catch (error) {
+      console.error('Error getting pending habits:', error);
+      resolve([]); // Return empty array on error
+    }
+  });
+}
+
+// Helper function to remove pending habit
+function removePendingHabit(db, id) {
+  return new Promise((resolve, reject) => {
+    try {
+      const transaction = db.transaction('pendingHabits', 'readwrite');
+      const store = transaction.objectStore('pendingHabits');
+      const request = store.delete(id);
+
+      request.onerror = () => reject(request.error);
+      request.onsuccess = () => resolve();
+      
+      // Add transaction complete handler
+      transaction.oncomplete = () => console.log(`Pending habit ${id} removed from offline storage`);
+    } catch (error) {
+      console.error('Error removing pending habit:', error);
+      reject(error);
+    }
+  });
+}
+
+// Helper function to get pending user settings
+function getPendingUserSettings(db) {
+  return new Promise((resolve, reject) => {
+    try {
+      const transaction = db.transaction('userSettings', 'readonly');
+      const store = transaction.objectStore('userSettings');
+      // We're storing a single settings object keyed by userId
+      // Get the first entry (there should only be one)
+      const request = store.getAll();
+
+      request.onerror = () => reject(request.error);
+      request.onsuccess = () => {
+        const settings = request.result;
+        resolve(settings && settings.length > 0 ? settings[0] : null);
+      };
+    } catch (error) {
+      console.error('Error getting pending user settings:', error);
+      resolve(null);
+    }
+  });
+}
+
+// Helper function to clear pending user settings after sync
+function clearPendingUserSettings(db) {
+  return new Promise((resolve, reject) => {
+    try {
+      const transaction = db.transaction('userSettings', 'readwrite');
+      const store = transaction.objectStore('userSettings');
+      // Clear all entries in the store
+      const request = store.clear();
+
+      request.onerror = () => reject(request.error);
+      request.onsuccess = () => resolve();
+    } catch (error) {
+      console.error('Error clearing user settings:', error);
+      reject(error);
+    }
+  });
+}

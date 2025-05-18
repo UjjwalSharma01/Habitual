@@ -154,7 +154,8 @@ export default function HabitOverviewCard({ habit, period = 'weekly' }) {
       </div>
       
       {/* Visual overview - scrollable on mobile, showing most recent data first */}
-      <div className="mt-4 flex justify-between overflow-x-auto pb-2 gap-2 md:gap-0 flex-row-reverse" 
+      <div className="mt-4 flex justify-between overflow-x-auto pb-2 gap-2 md:gap-0 flex-row-reverse scrollbar-hide" 
+           style={{ msOverflowStyle: 'none', scrollbarWidth: 'none' }}
            ref={(el) => {
              // Scroll to the right end (showing most recent data) when component mounts
              if (el) {
@@ -168,7 +169,7 @@ export default function HabitOverviewCard({ habit, period = 'weekly' }) {
               <div 
                 className={`h-7 w-7 sm:h-8 sm:w-8 rounded-full flex items-center justify-center border-2 ${
                   day.isCompleted 
-                    ? 'border-primary bg-primary text-white' 
+                    ? 'border-green-500 bg-green-500 text-white' 
                     : 'border-gray-300'
                 }`}
               >
@@ -183,7 +184,7 @@ export default function HabitOverviewCard({ habit, period = 'weekly' }) {
                 <div 
                   className={`h-7 w-7 sm:h-8 sm:w-8 rounded-full flex items-center justify-center border-2 ${
                     day.isCompleted 
-                      ? 'border-primary bg-primary text-white' 
+                      ? 'border-green-500 bg-green-500 text-white' 
                       : day.value ? 'border-amber-500' : 'border-gray-300'
                   }`}
                 >

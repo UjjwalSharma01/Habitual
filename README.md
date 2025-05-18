@@ -2,6 +2,12 @@
 
 Habitual is a sophisticated habit tracking application designed to help users build and maintain positive habits through personalized onboarding, intuitive tracking, and AI-powered insights.
 
+## Recent Fixes
+
+- **Turbopack Configuration**: Updated Next.js config to fix Turbopack warnings
+- **UI Scrollbar Fix**: Fixed white scrollbar in Monthly Overview card on desktop and corrected CSS implementation
+- **Service Worker Cleanup**: Properly integrated fixes for permission errors and cleaned up service worker files
+
 ## Features
 
 - **Premium Personalized Onboarding**: Create a personalized experience for new users
