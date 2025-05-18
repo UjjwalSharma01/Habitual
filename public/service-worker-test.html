@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Worker Test</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        button {
+            background-color: #4F46E5;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px 0;
+        }
+        pre {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 4px;
+            overflow: auto;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .success {
+            background-color: #d1fae5;
+            border: 1px solid #10b981;
+        }
+        .error {
+            background-color: #fee2e2;
+            border: 1px solid #ef4444;
+        }
+        .info {
+            background-color: #dbeafe;
+            border: 1px solid #3b82f6;
+        }
+    </style>
+</head>
+<body>
+    <h1>Service Worker Message Testing</h1>
+    
+    <div id="serviceWorkerStatus" class="status info">Checking service worker status...</div>
+    
+    <button id="registerSW">Register Service Worker</button>
+    <button id="unregisterSW">Unregister Service Worker</button>
+    <button id="sendMessage">Send SKIP_WAITING Message</button>
+    <button id="checkForUpdates">Check for Updates</button>
+    
+    <h2>Console Output</h2>
+    <pre id="consoleOutput"></pre>
+    
+    <script>
+        // Helper to update console output
+        function log(message, type = 'info') {
+            const consoleOutput = document.getElementById('consoleOutput');
+            const timestamp = new Date().toLocaleTimeString();
+            consoleOutput.innerHTML += `[${timestamp}] ${message}\n`;
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+            
+            // Also log to actual console
+            console.log(`[${timestamp}] ${message}`);
+        }
+        
+        // Update service worker status
+        function updateStatus(message, type = 'info') {
+            const statusEl = document.getElementById('serviceWorkerStatus');
+            statusEl.textContent = message;
+            statusEl.className = `status ${type}`;
+        }
+        
+        // Check if service worker is registered
+        async function checkServiceWorkerRegistration() {
+            try {
+                if ('serviceWorker' in navigator) {
+                    const registration = await navigator.serviceWorker.getRegistration();
+                    
+                    if (registration) {
+                        log(`Service worker registered: ${registration.scope}`);
+                        updateStatus(`Service worker registered: ${registration.scope}`, 'success');
+                        return registration;
+                    } else {
+                        log('No service worker found');
+                        updateStatus('No service worker registered', 'error');
+                        return null;
+                    }
+                } else {
+                    log('Service Worker not supported');
+                    updateStatus('Service Worker not supported in this browser', 'error');
+                    return null;
+                }
+            } catch (error) {
+                log(`Error checking service worker: ${error.message}`);
+                updateStatus(`Error checking service worker: ${error.message}`, 'error');
+                return null;
+            }
+        }
+        
+        // Register service worker
+        async function registerServiceWorker() {
+            if ('serviceWorker' in navigator) {
+                try {
+                    log('Attempting to register service worker...');
+                    const registration = await navigator.serviceWorker.register('/sw.js');
+                    log(`Service worker registered for scope: ${registration.scope}`);
+                    updateStatus(`Service worker registered successfully: ${registration.scope}`, 'success');
+                    return registration;
+                } catch (error) {
+                    log(`Service worker registration failed: ${error.message}`);
+                    updateStatus(`Service worker registration failed: ${error.message}`, 'error');
+                }
+            } else {
+                log('Service workers are not supported in this browser');
+                updateStatus('Service workers are not supported in this browser', 'error');
+            }
+            return null;
+        }
+        
+        // Unregister service worker
+        async function unregisterServiceWorker() {
+            if ('serviceWorker' in navigator) {
+                try {
+                    const registration = await navigator.serviceWorker.getRegistration();
+                    if (registration) {
+                        const success = await registration.unregister();
+                        if (success) {
+                            log('Service worker unregistered successfully');
+                            updateStatus('Service worker unregistered successfully', 'info');
+                        } else {
+                            log('Service worker could not be unregistered');
+                            updateStatus('Service worker could not be unregistered', 'error');
+                        }
+                    } else {
+                        log('No service worker registration found to unregister');
+                        updateStatus('No service worker registration found', 'info');
+                    }
+                } catch (error) {
+                    log(`Error unregistering service worker: ${error.message}`);
+                    updateStatus(`Error unregistering service worker: ${error.message}`, 'error');
+                }
+            }
+        }
+        
+        // Send message to service worker
+        async function sendMessageToServiceWorker() {
+            if ('serviceWorker' in navigator) {
+                try {
+                    const registration = await navigator.serviceWorker.getRegistration();
+                    if (registration && registration.active) {
+                        log('Sending SKIP_WAITING message to service worker...');
+                        registration.active.postMessage({ type: 'SKIP_WAITING' });
+                        log('Message sent to service worker');
+                        updateStatus('Message sent to service worker', 'success');
+                    } else if (registration && registration.installing) {
+                        log('Service worker is installing, will send message when active');
+                        updateStatus('Service worker is installing, wait until active', 'info');
+                    } else {
+                        log('No active service worker found to send message to');
+                        updateStatus('No active service worker found', 'error');
+                    }
+                } catch (error) {
+                    log(`Error sending message to service worker: ${error.message}`);
+                    updateStatus(`Error sending message: ${error.message}`, 'error');
+                }
+            }
+        }
+        
+        // Check for updates
+        async function checkForUpdates() {
+            if ('serviceWorker' in navigator) {
+                try {
+                    log('Checking for service worker updates...');
+                    const registration = await navigator.serviceWorker.getRegistration();
+                    
+                    if (registration) {
+                        await registration.update();
+                        
+                        if (registration.installing) {
+                            log('New service worker is installing');
+                            updateStatus('New service worker is installing', 'info');
+                        } else if (registration.waiting) {
+                            log('New service worker is waiting');
+                            updateStatus('New service worker is waiting to activate', 'info');
+                        } else {
+                            log('No update found');
+                            updateStatus('No update found', 'info');
+                        }
+                    } else {
+                        log('No service worker registration found');
+                        updateStatus('No service worker registration found', 'error');
+                    }
+                } catch (error) {
+                    log(`Error checking for updates: ${error.message}`);
+                    updateStatus(`Error checking for updates: ${error.message}`, 'error');
+                }
+            }
+        }
+        
+        // Set up event listeners
+        document.getElementById('registerSW').addEventListener('click', registerServiceWorker);
+        document.getElementById('unregisterSW').addEventListener('click', unregisterServiceWorker);
+        document.getElementById('sendMessage').addEventListener('click', sendMessageToServiceWorker);
+        document.getElementById('checkForUpdates').addEventListener('click', checkForUpdates);
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            checkServiceWorkerRegistration();
+            
+            // Set up listener for messages from service worker
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.addEventListener('message', (event) => {
+                    log(`Message received from service worker: ${JSON.stringify(event.data)}`);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

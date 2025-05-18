@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="150" viewBox="0 0 200 150">
+  <rect width="200" height="150" fill="#f3f4f6" />
+  <g transform="translate(70, 45)">
+    <path d="M30 0C13.432 0 0 13.432 0 30s13.432 30 30 30 30-13.432 30-30S46.568 0 30 0zm0 5c13.807 0 25 11.193 25 25S43.807 55 30 55 5 43.807 5 30 16.193 5 30 5zm-4.5 12.5a3 3 0 100 6 3 3 0 000-6zm9 0a3 3 0 100 6 3 3 0 000-6zm-14 15a3 3 0 013-3h12a3 3 0 013 3c0 5.523-4.477 10-10 10s-10-4.477-10-10h2z" fill="#9CA3AF"/>
+  </g>
+  <text x="100" y="120" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#4B5563">Image unavailable offline</text>
+</svg>

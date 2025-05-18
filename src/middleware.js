@@ -13,10 +13,38 @@ export function middleware(request) {
     '/',
     '/auth/login',
     '/auth/register',
+    '/offline'
   ];
   
-  // Check if the path is public
+  // PWA resources that don't require authentication
+  const pwaResources = [
+    '/manifest.json',
+    '/sw.js',
+    '/workbox-',
+    '/icons/',
+    '/fallback/'
+  ];
+  
+  // Check if the path is public or a PWA resource
   const isPublicPath = publicPaths.some(publicPath => path === publicPath);
+  const isPWAResource = pwaResources.some(resource => path.startsWith(resource));
+  
+  // Always allow PWA resources
+  if (isPWAResource) {
+    // Add cache control headers for PWA assets
+    const response = NextResponse.next();
+    if (path === '/sw.js') {
+      // Don't cache service worker
+      response.headers.set('Cache-Control', 'no-cache, no-store, max-age=0, must-revalidate');
+    } else if (path.startsWith('/workbox-')) {
+      // Cache Workbox scripts for 1 day
+      response.headers.set('Cache-Control', 'public, max-age=86400');
+    } else if (path === '/manifest.json') {
+      // Cache manifest for 1 hour
+      response.headers.set('Cache-Control', 'public, max-age=3600');
+    }
+    return response;
+  }
   
   // For now, allow all paths and let client-side auth handle redirects
   return NextResponse.next();

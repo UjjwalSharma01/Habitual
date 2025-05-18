@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { HabitualDB, useServiceWorker } from '@/utils/pwaUtils';
 
 export default function HabitForm({ initialData = {}, onSubmit, submitButtonText = "Save Habit", showCancel = false, onCancel }) {
   const [formData, setFormData] = useState({
@@ -103,11 +104,44 @@ export default function HabitForm({ initialData = {}, onSubmit, submitButtonText
     return isValid;
   };
 
-  const handleSubmit = (e) => {
+  const { isOnline } = useServiceWorker();
+  const db = new HabitualDB();
+  
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     if (validateForm()) {
-      onSubmit(formData);
+      // Prepare the data with an ID if it doesn't have one
+      const habitData = {
+        ...formData,
+        id: formData.id || `local-${Date.now()}`
+      };
+      
+      try {
+        // First, save to local IndexedDB regardless of connection status
+        await db.saveHabit(habitData);
+        
+        // If online, proceed with normal submission
+        if (isOnline) {
+          onSubmit(habitData);
+        } else {
+          // If offline, add to pending sync queue
+          await db.addPendingHabit(habitData);
+          
+          // Register for background sync when back online
+          await db.registerSync();
+          
+          // Still call onSubmit to update UI
+          onSubmit(habitData);
+          
+          // Show a notification that changes will sync when online
+          setError('You are currently offline. Your changes will sync when you reconnect.');
+          setTimeout(() => setError(''), 5000);
+        }
+      } catch (err) {
+        console.error('Error saving habit:', err);
+        setError('Failed to save habit. Please try again.');
+      }
     }
   };
 

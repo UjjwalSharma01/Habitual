@@ -9,17 +9,66 @@ import HabitList from '@/components/habits/HabitList';
 import HabitOverviewCard from '@/components/habits/HabitOverviewCard';
 import QuoteCard from '@/components/common/QuoteCard';
 import DashboardRecommendations from '@/components/analytics/DashboardRecommendations';
+import OfflineErrorBoundary from '@/components/common/OfflineErrorBoundary';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase/firebase';
+import { HabitualDB, useServiceWorker } from '@/utils/pwaUtils';
 
 export default function Dashboard() {
   const router = useRouter();
   const { user, loading } = useAuth();
   const { onboardingState, loadingOnboarding } = useOnboarding();
+  const { isOnline } = useServiceWorker();
   const [habits, setHabits] = useState([]);
   const [loadingHabits, setLoadingHabits] = useState(true);
   const [error, setError] = useState('');
   const [selectedHabit, setSelectedHabit] = useState(null);
+
+  // Define fetchHabits outside useEffect so it has access to the current isOnline state
+  const fetchHabits = async () => {
+    if (!user) return;
+    
+    try {
+      let habitsData = [];
+      const localDb = new HabitualDB();
+      
+      // Try to get habits from Firebase if online
+      if (isOnline) {
+        try {
+          const habitsRef = collection(db, 'habits');
+          const q = query(habitsRef, where('userId', '==', user.uid));
+          const querySnapshot = await getDocs(q);
+          
+          habitsData = querySnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+          }));
+          
+          // Cache habits in IndexedDB for offline use
+          for (const habit of habitsData) {
+            await localDb.saveHabit(habit);
+          }
+        } catch (firebaseError) {
+          console.error('Error fetching habits from Firebase:', firebaseError);
+          // If Firebase fails, try to fall back to local data
+          const localHabits = await localDb.getHabits(user.uid);
+          habitsData = localHabits;
+        }
+      } else {
+        // If offline, get habits from IndexedDB
+        console.log('Offline mode: getting habits from IndexedDB');
+        const localHabits = await localDb.getHabits(user.uid);
+        habitsData = localHabits;
+      }
+      
+      setHabits(habitsData);
+      setLoadingHabits(false);
+    } catch (error) {
+      console.error('Error fetching habits:', error);
+      setError('Failed to load habits. Please try again later.');
+      setLoadingHabits(false);
+    }
+  };
 
   useEffect(() => {
     // Redirect if not logged in
@@ -33,34 +82,14 @@ export default function Dashboard() {
       router.push('/onboarding');
       return;
     }
-
-    // Fetch user's habits
-    const fetchHabits = async () => {
-      if (!user) return;
-      
-      try {
-        const habitsRef = collection(db, 'habits');
-        const q = query(habitsRef, where('userId', '==', user.uid));
-        const querySnapshot = await getDocs(q);
-        
-        const habitsData = querySnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        }));
-        
-        setHabits(habitsData);
-        setLoadingHabits(false);
-      } catch (error) {
-        console.error('Error fetching habits:', error);
-        setError('Failed to load habits. Please try again later.');
-        setLoadingHabits(false);
-      }
-    };
-
+  
+    // Fetch habits when component mounts and when user or online status changes
     if (user) {
       fetchHabits();
     }
-  }, [user, loading, router, loadingOnboarding, onboardingState.completed]);
+  // fetchHabits is defined outside useEffect so it won't change between renders
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, loading, router, loadingOnboarding, onboardingState.completed, isOnline]);
 
   if (loading || !user) {
     return (
@@ -74,13 +103,14 @@ export default function Dashboard() {
 
   return (
     <AppLayout>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 md:py-8">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-          <div className="flex-1 min-w-0">
-            <h2 className="text-xl font-bold leading-7 text-foreground sm:text-2xl md:text-3xl truncate">
-              Welcome, {user.displayName || 'User'}
-            </h2>
-          </div>
+      <OfflineErrorBoundary>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 md:py-8">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+            <div className="flex-1 min-w-0">
+              <h2 className="text-xl font-bold leading-7 text-foreground sm:text-2xl md:text-3xl truncate">
+                Welcome, {user.displayName || 'User'}
+              </h2>
+            </div>
           <div className="mt-2 sm:mt-0">
             <button
               type="button"
@@ -173,6 +203,7 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
+      </OfflineErrorBoundary>
     </AppLayout>
   );
 }

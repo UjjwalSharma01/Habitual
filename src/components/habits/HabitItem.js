@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase/firebase';
+import { HabitualDB, useServiceWorker } from '@/utils/pwaUtils';
 
 export default function HabitItem({ habit }) {
   const router = useRouter();
@@ -15,12 +16,14 @@ export default function HabitItem({ habit }) {
     (habit.steps ? habit.steps.map(() => false) : [])
   );
   
+  const { isOnline } = useServiceWorker();
+  const localDb = new HabitualDB();
+  
   const handleBinaryCheckIn = async () => {
     try {
       setLoading(true);
       
       const today = new Date().toISOString().split('T')[0];
-      const habitRef = doc(db, 'habits', habit.id);
       
       // Create a copy of the current check-ins or an empty object if it doesn't exist
       const checkIns = habit.checkIns || {};
@@ -28,16 +31,48 @@ export default function HabitItem({ habit }) {
       // Toggle the check-in status for today
       checkIns[today] = !checkIns[today];
       
-      await updateDoc(habitRef, {
+      // Update the habit object with new check-ins
+      const updatedHabit = {
+        ...habit,
         checkIns,
         lastUpdated: new Date()
-      });
+      };
+      
+      // Always store in IndexedDB for offline access
+      await localDb.saveHabit(updatedHabit);
+      
+      // If online, also update Firebase
+      if (isOnline) {
+        const habitRef = doc(db, 'habits', habit.id);
+        await updateDoc(habitRef, {
+          checkIns,
+          lastUpdated: new Date()
+        });
+      } else {
+        // If offline, add to pending sync queue
+        await localDb.addPendingHabit(updatedHabit);
+        await localDb.registerSync();
+      }
       
       // Refresh the habits list
       router.refresh();
     } catch (error) {
       console.error('Error updating habit check-in:', error);
-      alert('Failed to update habit. Please try again.');
+      // Save locally even if Firebase update fails
+      try {
+        const updatedHabit = {
+          ...habit,
+          checkIns: habit.checkIns || {},
+          lastUpdated: new Date()
+        };
+        updatedHabit.checkIns[today] = !updatedHabit.checkIns[today];
+        await localDb.saveHabit(updatedHabit);
+        await localDb.addPendingHabit(updatedHabit);
+        router.refresh();
+      } catch (localError) {
+        console.error('Local save also failed:', localError);
+        alert('Failed to update habit. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
@@ -49,7 +84,6 @@ export default function HabitItem({ habit }) {
       setLoading(true);
       
       const today = new Date().toISOString().split('T')[0];
-      const habitRef = doc(db, 'habits', habit.id);
       
       // Create a copy of the current check-ins or an empty object if it doesn't exist
       const checkIns = habit.checkIns || {};
@@ -60,10 +94,28 @@ export default function HabitItem({ habit }) {
         timestamp: new Date()
       };
       
-      await updateDoc(habitRef, {
+      // Update the habit object with new check-ins
+      const updatedHabit = {
+        ...habit,
         checkIns,
         lastUpdated: new Date()
-      });
+      };
+      
+      // Always store in IndexedDB for offline access
+      await localDb.saveHabit(updatedHabit);
+      
+      // If online, also update Firebase
+      if (isOnline) {
+        const habitRef = doc(db, 'habits', habit.id);
+        await updateDoc(habitRef, {
+          checkIns,
+          lastUpdated: new Date()
+        });
+      } else {
+        // If offline, add to pending sync queue
+        await localDb.addPendingHabit(updatedHabit);
+        await localDb.registerSync();
+      }
       
       // Close the modal
       setShowTrackingModal(false);
@@ -72,7 +124,26 @@ export default function HabitItem({ habit }) {
       router.refresh();
     } catch (error) {
       console.error('Error updating habit check-in:', error);
-      alert('Failed to update habit. Please try again.');
+      
+      // Try to save locally even if Firebase update fails
+      try {
+        const updatedHabit = {
+          ...habit,
+          checkIns: habit.checkIns || {},
+          lastUpdated: new Date()
+        };
+        updatedHabit.checkIns[today] = {
+          value: Number(value),
+          timestamp: new Date()
+        };
+        await localDb.saveHabit(updatedHabit);
+        await localDb.addPendingHabit(updatedHabit);
+        setShowTrackingModal(false);
+        router.refresh();
+      } catch (localError) {
+        console.error('Local save also failed:', localError);
+        alert('Failed to update habit. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
@@ -84,7 +155,6 @@ export default function HabitItem({ habit }) {
       setLoading(true);
       
       const today = new Date().toISOString().split('T')[0];
-      const habitRef = doc(db, 'habits', habit.id);
       
       // Create a copy of the current check-ins or an empty object if it doesn't exist
       const checkIns = habit.checkIns || {};
@@ -96,10 +166,28 @@ export default function HabitItem({ habit }) {
         timestamp: new Date()
       };
       
-      await updateDoc(habitRef, {
+      // Update the habit object with new check-ins
+      const updatedHabit = {
+        ...habit,
         checkIns,
         lastUpdated: new Date()
-      });
+      };
+      
+      // Always store in IndexedDB for offline access
+      await localDb.saveHabit(updatedHabit);
+      
+      // If online, also update Firebase
+      if (isOnline) {
+        const habitRef = doc(db, 'habits', habit.id);
+        await updateDoc(habitRef, {
+          checkIns,
+          lastUpdated: new Date()
+        });
+      } else {
+        // If offline, add to pending sync queue
+        await localDb.addPendingHabit(updatedHabit);
+        await localDb.registerSync();
+      }
       
       // Close the modal
       setShowTrackingModal(false);
@@ -108,7 +196,27 @@ export default function HabitItem({ habit }) {
       router.refresh();
     } catch (error) {
       console.error('Error updating habit check-in:', error);
-      alert('Failed to update habit. Please try again.');
+      
+      // Try to save locally even if Firebase update fails
+      try {
+        const updatedHabit = {
+          ...habit,
+          checkIns: habit.checkIns || {},
+          lastUpdated: new Date()
+        };
+        updatedHabit.checkIns[today] = {
+          steps,
+          completed: steps.every(step => step),
+          timestamp: new Date()
+        };
+        await localDb.saveHabit(updatedHabit);
+        await localDb.addPendingHabit(updatedHabit);
+        setShowTrackingModal(false);
+        router.refresh();
+      } catch (localError) {
+        console.error('Local save also failed:', localError);
+        alert('Failed to update habit. Please try again.');
+      }
     } finally {
       setLoading(false);
     }

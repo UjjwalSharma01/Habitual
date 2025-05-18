@@ -148,7 +148,7 @@ export default function HabitOverviewCard({ habit, period = 'weekly' }) {
           <p className="text-xs text-muted-foreground">{formatDateRange()}</p>
         </div>
         <div className="text-right sm:mt-0 mt-1">
-          <p className="text-xl sm:text-2xl font-bold">{overview.completionRate}%</p>
+          <p className="text-xl sm:text-2xl font-bold text-primary">{overview.completionRate}%</p>
           <p className="text-xs text-muted-foreground">Completion rate</p>
         </div>
       </div>
@@ -168,7 +168,7 @@ export default function HabitOverviewCard({ habit, period = 'weekly' }) {
               <div 
                 className={`h-7 w-7 sm:h-8 sm:w-8 rounded-full flex items-center justify-center border-2 ${
                   day.isCompleted 
-                    ? 'border-green-500 bg-green-500 text-white' 
+                    ? 'border-primary bg-primary text-white' 
                     : 'border-gray-300'
                 }`}
               >
@@ -183,8 +183,8 @@ export default function HabitOverviewCard({ habit, period = 'weekly' }) {
                 <div 
                   className={`h-7 w-7 sm:h-8 sm:w-8 rounded-full flex items-center justify-center border-2 ${
                     day.isCompleted 
-                      ? 'border-green-500 bg-green-500 text-white' 
-                      : day.value ? 'border-yellow-500' : 'border-gray-300'
+                      ? 'border-primary bg-primary text-white' 
+                      : day.value ? 'border-amber-500' : 'border-gray-300'
                   }`}
                 >
                   {day.value !== null && (
