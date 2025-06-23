@@ -9,6 +9,96 @@ export function useServiceWorker() {
   const [registration, setRegistration] = useState(null);
   const [isInstallPromptShown, setIsInstallPromptShown] = useState(false);
   const [installPrompt, setInstallPrompt] = useState(null);
+  const [lastPingSuccess, setLastPingSuccess] = useState(null);
+
+  // Enhanced connectivity checker - more reliable than just navigator.onLine
+  const checkConnectivity = async () => {
+    const navigatorOnline = navigator.onLine;
+    
+    if (!navigatorOnline) {
+      // If the browser says we're offline, trust it
+      setIsOnline(false);
+      
+      // Store offline status in IndexedDB if possible
+      try {
+        const dbPromise = indexedDB.open('HabitualDB', 3);
+        dbPromise.onsuccess = (event) => {
+          const db = event.target.result;
+          
+          if (db.objectStoreNames.contains('offlineStatus')) {
+            const tx = db.transaction('offlineStatus', 'readwrite');
+            const store = tx.objectStore('offlineStatus');
+            store.put({
+              key: 'lastOffline',
+              timestamp: new Date().toISOString(),
+              reason: 'navigator.onLine=false'
+            });
+          }
+        };
+      } catch (dbError) {
+        console.error('Failed to record offline status:', dbError);
+      }
+      
+      return false;
+    }
+
+    try {
+      // Attempt to fetch a tiny endpoint with cache busting
+      const cacheBuster = Date.now();
+      const response = await fetch(`/api/health-check?cb=${cacheBuster}`, {
+        method: 'HEAD',
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0'
+        },
+        // Short timeout to avoid hanging
+        signal: AbortSignal.timeout(2000)
+      });
+      
+      // If we get a response, we're online
+      const online = response.ok;
+      
+      // Update state and record successful ping
+      setIsOnline(online);
+      if (online) {
+        setLastPingSuccess(Date.now());
+        
+        // Notify service worker about online status
+        if (registration && registration.active) {
+          registration.active.postMessage({
+            type: 'CONNECTIVITY_CHANGE',
+            isOnline: true
+          });
+        }
+      }
+      
+      return online;
+    } catch (error) {
+      // If we can't reach the server, we might be offline even if navigator.onLine is true
+      console.log('Connectivity check failed:', error.name);
+      
+      // If we've had a successful ping in the last minute, give the benefit of the doubt
+      // This prevents flickering due to temporary network hiccups
+      const wasRecentlyOnline = lastPingSuccess && (Date.now() - lastPingSuccess < 60000);
+      
+      // Only update state if we're truly offline (not just a temporary hiccup)
+      if (!wasRecentlyOnline) {
+        setIsOnline(false);
+        
+        // Notify service worker about offline status
+        if (registration && registration.active) {
+          registration.active.postMessage({
+            type: 'CONNECTIVITY_CHANGE',
+            isOnline: false
+          });
+        }
+      }
+      
+      return wasRecentlyOnline;
+    }
+  };
 
   useEffect(() => {
     // Check if service workers are supported
@@ -16,12 +106,47 @@ export function useServiceWorker() {
       const wb = new Workbox('/sw.js');
 
       // Add update found event listener
-      wb.addEventListener('controlling', () => {
+      wb.addEventListener('controlling', event => {
+        console.log('Service worker is now controlling the page');
+        // Reload the page to ensure it uses the latest version
         window.location.reload();
       });
 
-      wb.addEventListener('waiting', () => {
+      wb.addEventListener('waiting', event => {
+        console.log('New service worker is waiting to activate');
+        // Set flag to show update prompt to user
         setIsUpdateAvailable(true);
+      });
+      
+      wb.addEventListener('activated', event => {
+        console.log('Service worker activated');
+        // If there were clients waiting for this activation, reload
+        if (event.isUpdate) {
+          console.log('Service worker updated - reloading page');
+          window.location.reload();
+        }
+      });
+      
+      wb.addEventListener('redundant', event => {
+        console.warn('Service worker became redundant - may indicate an issue');
+      });
+
+      // Listen for messages from the service worker
+      wb.addEventListener('message', event => {
+        const data = event.data;
+        console.log('Message from Service Worker:', data);
+        
+        // Handle different message types from service worker
+        if (data && data.type === 'CONNECTION_TEST') {
+          // Handle connection test results from SW
+          setIsOnline(data.isOnline);
+        } else if (data && data.type === 'HABITS_SYNCED') {
+          console.log(`Sync completed: ${data.synced} of ${data.total} habits synced`);
+          // Could trigger a notification or UI update here
+        } else if (data && data.type === 'SETTINGS_SYNCED') {
+          console.log('Settings synchronized successfully');
+          // Could trigger a settings refresh here
+        }
       });
 
       // Register the service worker
@@ -33,7 +158,12 @@ export function useServiceWorker() {
     }
 
     // Set up online/offline listeners
-    const handleOnline = () => setIsOnline(true);
+    const handleOnline = () => {
+      // Don't immediately trust the browser's online event
+      // Verify with an actual network request
+      checkConnectivity();
+    };
+    
     const handleOffline = () => setIsOnline(false);
 
     // Listen for PWA install prompt
@@ -48,10 +178,12 @@ export function useServiceWorker() {
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
     
-    // Set initial online state
-    setIsOnline(navigator.onLine);
-
+    // Set initial online state and start periodic checks
+    checkConnectivity();
+    const intervalId = setInterval(checkConnectivity, 30000); // Check every 30 seconds
+    
     return () => {
+      clearInterval(intervalId);
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
     };
@@ -107,48 +239,51 @@ export class HabitualDB {
 
   async initDB() {
     return new Promise((resolve, reject) => {
-      const request = indexedDB.open('HabitualDB', 2); // Updated to version 2 to match service worker
+      try {
+        const request = indexedDB.open('HabitualDB', 3); // Updated to version 3 for additional offline capabilities
 
-      request.onerror = (event) => {
-        console.error('IndexedDB error:', event.target.error);
-        reject('Error opening database');
-      };
-
-      request.onsuccess = (event) => {
-        const db = request.result;
-        
-        // Add error handler for the database
-        db.onerror = (event) => {
-          console.error('Database error:', event.target.error);
+        request.onerror = (event) => {
+          console.error('IndexedDB error:', event.target.error);
+          reject('Error opening database');
         };
-        
-        resolve(db);
-      };
 
-      request.onupgradeneeded = (event) => {
-        const db = event.target.result;
-        const oldVersion = event.oldVersion;
-        
-        // Create object stores if they don't exist
-        if (oldVersion < 1) {
-          // Version 1 schema
-          if (!db.objectStoreNames.contains('habits')) {
-            const habitStore = db.createObjectStore('habits', { keyPath: 'id' });
-            habitStore.createIndex('userId', 'userId', { unique: false });
+        request.onsuccess = (event) => {
+          const db = request.result;
+          
+          // Add error handler for the database
+          db.onerror = (event) => {
+            console.error('Database error:', event.target.error);
+          };
+          
+          resolve(db);
+        };
+
+        request.onupgradeneeded = (event) => {
+          const db = event.target.result;
+          const oldVersion = event.oldVersion;
+          
+          console.log(`Upgrading IndexedDB from version ${oldVersion} to ${event.newVersion}`);
+          
+          // Create object stores if they don't exist
+          if (oldVersion < 1) {
+            // Version 1 schema
+            if (!db.objectStoreNames.contains('habits')) {
+              const habitStore = db.createObjectStore('habits', { keyPath: 'id' });
+              habitStore.createIndex('userId', 'userId', { unique: false });
+            }
+            
+            if (!db.objectStoreNames.contains('completions')) {
+              const completionsStore = db.createObjectStore('completions', { keyPath: 'id' });
+              completionsStore.createIndex('habitId', 'habitId', { unique: false });
+              completionsStore.createIndex('date', 'date', { unique: false });
+            }
+            
+            if (!db.objectStoreNames.contains('pendingHabits')) {
+              db.createObjectStore('pendingHabits', { keyPath: 'id' });
+            }
           }
           
-          if (!db.objectStoreNames.contains('completions')) {
-            const completionsStore = db.createObjectStore('completions', { keyPath: 'id' });
-            completionsStore.createIndex('habitId', 'habitId', { unique: false });
-            completionsStore.createIndex('date', 'date', { unique: false });
-          }
-          
-          if (!db.objectStoreNames.contains('pendingHabits')) {
-            db.createObjectStore('pendingHabits', { keyPath: 'id' });
-          }
-        }
-        
-        if (oldVersion < 2) {
+          if (oldVersion < 2) {
           // Version 2 schema additions
           if (!db.objectStoreNames.contains('userSettings')) {
             db.createObjectStore('userSettings', { keyPath: 'userId' });
@@ -167,7 +302,33 @@ export class HabitualDB {
             actionsStore.createIndex('timestamp', 'timestamp', { unique: false });
           }
         }
-      };
+        
+        if (oldVersion < 3) {
+          // Version 3 schema additions for improved offline functionality
+          if (!db.objectStoreNames.contains('offlineStatus')) {
+            const statusStore = db.createObjectStore('offlineStatus', { keyPath: 'key' });
+          }
+          
+          if (!db.objectStoreNames.contains('offlineRequests')) {
+            const requestsStore = db.createObjectStore('offlineRequests', { 
+              keyPath: 'id',
+              autoIncrement: true 
+            });
+            requestsStore.createIndex('url', 'url', { unique: false });
+            requestsStore.createIndex('timestamp', 'timestamp', { unique: false });
+            requestsStore.createIndex('processed', 'processed', { unique: false });
+          }
+          
+          // Add sync status store for tracking sync operations
+          if (!db.objectStoreNames.contains('syncStatus')) {
+            const syncStore = db.createObjectStore('syncStatus', { keyPath: 'type' });
+          }
+        }
+      }
+      } catch (err) {
+        console.error('Critical error during IndexedDB initialization:', err);
+        reject('Failed to initialize database: ' + err.message);
+      }
     });
   }
 
@@ -593,38 +754,134 @@ export class HabitualDB {
 
   // Register for sync when back online
   async registerSync() {
-    // Check if we're in an installed PWA context before trying to access the service worker
-    // This prevents permission prompts in regular browser context
-    const isPWA = isRunningAsPWA();
-    
-    if (!isPWA) {
-      console.log('Not registering sync - not running as PWA');
-      return false;
+    // First check if we're online - if we are, we might not need background sync
+    if (navigator.onLine) {
+      try {
+        // If we're online, try immediate sync first
+        const pendingHabits = await this.getPendingHabitsForSync();
+        if (pendingHabits && pendingHabits.length > 0) {
+          console.log(`Attempting immediate sync of ${pendingHabits.length} pending habits`);
+          await this.syncPendingHabitsImmediately(pendingHabits);
+        }
+      } catch (error) {
+        console.warn('Error during immediate sync attempt:', error);
+        // Fall back to background sync
+      }
     }
     
+    // Check if background sync is supported
     if (!('serviceWorker' in navigator) || !('SyncManager' in window)) {
-      console.log('Not registering sync - ServiceWorker or SyncManager not supported');
+      console.log('Background sync not supported in this browser');
       return false;
     }
     
     try {
-      // Use a safer way to get registration that doesn't trigger permission requests
-      // Only check for *currently active* registrations, don't try to register one
-      const registration = await navigator.serviceWorker.getRegistration('/sw.js');
+      // Get the service worker registration without creating new ones
+      const registrations = await navigator.serviceWorker.getRegistrations();
+      const registration = registrations.find(reg => 
+        reg.active && (reg.scope.includes('/') || reg.scope.endsWith('/'))
+      );
       
       // Only register sync if we actually have an active service worker
       if (registration && registration.active) {
-        await registration.sync.register('sync-habits');
-        console.log('Background sync registered for habits');
-        return true;
+        // Check if we have permission to use background sync
+        const permissionStatus = await navigator.permissions.query({
+          name: 'periodic-background-sync'
+        }).catch(() => ({ state: 'denied' })); // Handle browsers that don't support this API
+        
+        if (permissionStatus.state === 'granted' || permissionStatus.state === 'prompt') {
+          await registration.sync.register('sync-habits');
+          console.log('Background sync registered for habits');
+          return true;
+        } else {
+          console.log('Background sync permission not granted');
+          // Fall back to storing data for retry later
+          return false;
+        }
       } else {
-        console.log('Not registering sync - no active service worker found');
+        console.log('No active service worker found for registration');
         return false;
       }
     } catch (err) {
-      console.error('Error registering sync:', err);
+      console.error('Error registering background sync:', err);
       return false;
     }
+  }
+  
+  // New method to handle immediate sync when online
+  async syncPendingHabitsImmediately(pendingHabits) {
+    if (!pendingHabits || !pendingHabits.length) return false;
+    
+    let syncedCount = 0;
+    
+    for (const habit of pendingHabits) {
+      try {
+        const response = await fetch('/api/habits/sync', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(habit)
+        });
+        
+        if (response.ok) {
+          // Remove from pending storage
+          await this.removePendingHabit(habit.id);
+          syncedCount++;
+        }
+      } catch (error) {
+        console.error('Error syncing habit immediately:', error);
+      }
+    }
+    
+    return syncedCount > 0;
+  }
+  
+  // Helper to get pending habits for sync
+  async getPendingHabitsForSync() {
+    const db = await this.getDB();
+    return new Promise((resolve, reject) => {
+      try {
+        if (!db.objectStoreNames.contains('pendingHabits')) {
+          return resolve([]);
+        }
+        
+        const transaction = db.transaction('pendingHabits', 'readonly');
+        const store = transaction.objectStore('pendingHabits');
+        const request = store.getAll();
+        
+        request.onerror = () => {
+          console.error('Error getting pending habits:', request.error);
+          resolve([]);
+        };
+        
+        request.onsuccess = () => resolve(request.result || []);
+      } catch (error) {
+        console.error('Error in getPendingHabitsForSync:', error);
+        resolve([]);
+      }
+    });
+  }
+  
+  // Helper to remove a pending habit after sync
+  async removePendingHabit(id) {
+    const db = await this.getDB();
+    return new Promise((resolve, reject) => {
+      try {
+        const transaction = db.transaction('pendingHabits', 'readwrite');
+        const store = transaction.objectStore('pendingHabits');
+        const request = store.delete(id);
+        
+        transaction.oncomplete = () => resolve(true);
+        transaction.onerror = () => {
+          console.error('Error removing pending habit:', transaction.error);
+          resolve(false);
+        };
+      } catch (error) {
+        console.error('Error in removePendingHabit:', error);
+        resolve(false);
+      }
+    });
   }
   
   // Register for user settings sync

@@ -53,11 +53,74 @@ self.addEventListener('activate', event => {
 });
 
 // Add message event listener to handle messages from the client
-self.addEventListener('message', event => {
+self.addEventListener('message', async event => {
   console.log('Service Worker: Message received', event.data);
   
   if (event.data && event.data.type === 'SKIP_WAITING') {
     self.skipWaiting();
+  }
+  
+  // Handle connectivity status messages from client
+  if (event.data && event.data.type === 'CONNECTIVITY_CHANGE') {
+    const isOnline = event.data.isOnline;
+    console.log(`Service Worker: Connectivity changed to ${isOnline ? 'online' : 'offline'}`);
+    
+    try {
+      // Store the connectivity state in IndexedDB for future reference
+      const db = await openIndexedDB();
+      if (db.objectStoreNames.contains('offlineStatus')) {
+        const tx = db.transaction('offlineStatus', 'readwrite');
+        const store = tx.objectStore('offlineStatus');
+        
+        await store.put({
+          key: 'connectivityStatus',
+          isOnline: isOnline,
+          timestamp: new Date().toISOString()
+        });
+      }
+      
+      // If coming back online, trigger sync for any pending operations
+      if (isOnline) {
+        // Trigger background sync if supported
+        if ('sync' in self.registration) {
+          // Register sync for habits
+          await self.registration.sync.register('sync-habits')
+            .then(() => console.log('Background sync registered after coming back online'))
+            .catch(err => console.error('Error registering sync after coming online:', err));
+          
+          // Also register sync for user settings
+          await self.registration.sync.register('sync-user-settings')
+            .then(() => console.log('User settings sync registered after coming back online'))
+            .catch(err => console.error('Error registering settings sync after coming online:', err));
+        }
+        
+        // Notify all clients that we're back online
+        const clients = await self.clients.matchAll();
+        clients.forEach(client => {
+          client.postMessage({
+            type: 'ONLINE_STATUS_CHANGE',
+            isOnline: true,
+            timestamp: new Date().toISOString()
+          });
+        });
+      }
+    } catch (error) {
+      console.error('Error handling connectivity change message:', error);
+    }
+  }
+  
+  // Add a ping/health check functionality
+  if (event.data && event.data.type === 'PING') {
+    try {
+      // Send a pong back to the client
+      event.source.postMessage({
+        type: 'PONG',
+        timestamp: new Date().toISOString(),
+        swVersion: '3.0.0' // Update this when making significant changes
+      });
+    } catch (error) {
+      console.error('Error sending PONG response:', error);
+    }
   }
 });
 
@@ -164,12 +227,41 @@ workbox.routing.registerRoute(
   })
 );
 
-// Default API handling
+// Health check API with very fast fallback to help with quick offline detection
+workbox.routing.registerRoute(
+  ({ url }) => url.pathname.includes('/api/health-check'),
+  new workbox.strategies.NetworkFirst({
+    cacheName: CACHE_NAMES.api,
+    networkTimeoutSeconds: 1.5, // Slightly longer timeout but still fast for reliable detection
+    plugins: [
+      new workbox.cacheableResponse.CacheableResponsePlugin({
+        statuses: [0, 200]
+      }),
+      new workbox.expiration.ExpirationPlugin({
+        maxEntries: 2, // Keep the last two health check responses
+        maxAgeSeconds: 300, // 5 minutes cache time for better offline experience
+        purgeOnQuotaError: true,
+      }),
+      // Add a plugin to handle network timeouts gracefully
+      {
+        fetchDidFail: async ({ request }) => {
+          console.log('Health check fetch failed, likely offline');
+        }
+      }
+    ],
+  })
+);
+
+// Default API handling with improved offline support
 workbox.routing.registerRoute(
   ({ url }) => url.pathname.startsWith('/api/'),
   new workbox.strategies.NetworkFirst({
     cacheName: CACHE_NAMES.api,
+    networkTimeoutSeconds: 3, // Fall back to cache after 3 seconds - this is critical for offline support
     plugins: [
+      new workbox.cacheableResponse.CacheableResponsePlugin({
+        statuses: [0, 200], // Cache opaque responses as well as successful ones
+      }),
       new workbox.expiration.ExpirationPlugin({
         maxEntries: 200,
         maxAgeSeconds: 2 * 60 * 60, // 2 hours
@@ -184,19 +276,79 @@ workbox.routing.setCatchHandler(async ({ event, request }) => {
   console.log(`Service Worker: Falling back to offline handler for: ${request.url}`);
   
   const destination = request.destination;
+  const url = new URL(request.url);
+  
+  // Store the failed request for potential sync later
+  try {
+    const db = await openIndexedDB();
+    if (db.objectStoreNames.contains('offlineRequests')) {
+      const tx = db.transaction('offlineRequests', 'readwrite');
+      const store = tx.objectStore('offlineRequests');
+      
+      // Store the failed request for later analysis/retry
+      store.add({
+        url: request.url,
+        method: request.method,
+        timestamp: new Date().toISOString(),
+        processed: false,
+        destination: destination,
+        pathname: url.pathname
+      });
+    }
+  } catch (dbError) {
+    console.error('Failed to store offline request:', dbError);
+  }
   
   // If it's a document/page request, return the offline page
   if (destination === 'document') {
-    return caches.match('/offline') || Response.error();
+    const offlinePage = await caches.match('/offline');
+    if (offlinePage) return offlinePage;
+    return Response.error();
   }
   
   // If it's an image request, return a fallback image
   if (destination === 'image') {
-    return caches.match('/icons/offline-image.png') || Response.error();
+    const fallbackImage = await caches.match('/icons/offline-image.png');
+    if (fallbackImage) return fallbackImage;
+    return Response.error();
   }
   
   // For API requests, return a JSON response indicating offline status
   if (request.url.includes('/api/')) {
+    // Check if we can provide specific offline data based on the API endpoint
+    if (request.url.includes('/api/habits')) {
+      // Try to get data from IndexedDB for habits requests
+      try {
+        const db = await openIndexedDB();
+        let offlineData = [];
+        
+        if (db.objectStoreNames.contains('habits')) {
+          const transaction = db.transaction('habits', 'readonly');
+          const store = transaction.objectStore('habits');
+          offlineData = await new Promise((resolve) => {
+            const request = store.getAll();
+            request.onsuccess = () => resolve(request.result || []);
+            request.onerror = () => resolve([]);
+          });
+        }
+        
+        return new Response(
+          JSON.stringify({
+            success: true,
+            offline: true,
+            data: offlineData,
+            message: 'Offline data retrieved from cache. Some functionality may be limited.'
+          }),
+          {
+            headers: { 'Content-Type': 'application/json' }
+          }
+        );
+      } catch (error) {
+        console.error('Error providing offline habits data:', error);
+      }
+    }
+    
+    // Default offline API response
     return new Response(
       JSON.stringify({
         success: false,
@@ -242,6 +394,9 @@ async function syncHabits() {
     // Try to sync each habit with retry logic
     let successCount = 0;
     
+    // Get the device ID once before the sync loop
+    const deviceId = await getDeviceId();
+    
     await Promise.all(pendingHabits.map(async (habit) => {
       // Try up to 3 times with exponential backoff
       for (let attempt = 0; attempt < 3; attempt++) {
@@ -251,18 +406,23 @@ async function syncHabits() {
             headers: {
               'Content-Type': 'application/json',
               'X-Sync-Timestamp': new Date().toISOString(),
-              'X-Device-ID': getDeviceId()
+              'X-Device-ID': deviceId,
+              'X-Sync-Attempt': `${attempt + 1}` // Track retry attempts
             },
             body: JSON.stringify(habit),
           });
 
           if (response.ok) {
+            // Log success details
+            console.log(`Service Worker: Successfully synced habit ${habit.id} on attempt ${attempt + 1}`);
+            
             // If successful, remove from pending
             await removePendingHabit(db, habit.id);
             successCount++;
             break; // Exit retry loop if successful
           } else {
             // If server error, wait and retry
+            console.warn(`Service Worker: Sync attempt ${attempt + 1} failed with status ${response.status} for habit ${habit.id}`);
             const waitTime = Math.pow(2, attempt) * 1000; // Exponential backoff
             await new Promise(resolve => setTimeout(resolve, waitTime));
           }
@@ -339,28 +499,66 @@ async function syncUserSettings() {
   }
 }
 
-// Helper function to generate or retrieve a persistent device ID
+// Helper function to generate a persistent device ID
+// Note: Service workers can't access localStorage directly, so we generate a consistent ID
 function getDeviceId() {
-  let deviceId = localStorage.getItem('habitual-device-id');
-  
-  if (!deviceId) {
-    deviceId = `device_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`;
+  // Try to get a device ID from IndexedDB first for consistency
+  return new Promise(async (resolve) => {
     try {
-      localStorage.setItem('habitual-device-id', deviceId);
+      const db = await openIndexedDB();
+      
+      if (db.objectStoreNames.contains('offlineStatus')) {
+        const transaction = db.transaction('offlineStatus', 'readwrite');
+        const store = transaction.objectStore('offlineStatus');
+        
+        // Try to get existing device ID
+        const request = store.get('deviceId');
+        
+        request.onsuccess = () => {
+          if (request.result && request.result.id) {
+            // Use existing ID
+            resolve(request.result.id);
+          } else {
+            // Generate new ID and store it
+            const newId = `device_${self.registration?.scope || ''}_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`;
+            
+            store.put({
+              key: 'deviceId',
+              id: newId,
+              created: new Date().toISOString()
+            });
+            
+            resolve(newId);
+          }
+        };
+        
+        request.onerror = () => {
+          // Fallback to generated ID if error
+          const fallbackId = `device_${self.registration?.scope || ''}_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`;
+          console.error('Error getting device ID from IndexedDB, using fallback');
+          resolve(fallbackId);
+        };
+      } else {
+        // Fallback if store doesn't exist
+        resolve(`device_${self.registration?.scope || ''}_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`);
+      }
     } catch (error) {
-      console.error('Could not save device ID to localStorage:', error);
+      // Fallback if any error occurs
+      console.error('Error in getDeviceId:', error);
+      resolve(`device_${self.registration?.scope || ''}_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`);
     }
-  }
-  
-  return deviceId;
+  });
 }
 
 // Helper function to open IndexedDB with version update handling
 function openIndexedDB() {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open('HabitualDB', 2); // Increased version number to add new stores
+    const request = indexedDB.open('HabitualDB', 3); // Version 3 for improved offline support
 
-    request.onerror = () => reject(request.error);
+    request.onerror = (event) => {
+      console.error('Service Worker: Error opening IndexedDB:', event.target.error);
+      reject(event.target.error || new Error('Unknown IndexedDB error'));
+    };
     request.onsuccess = () => resolve(request.result);
 
     request.onupgradeneeded = (event) => {
@@ -390,7 +588,33 @@ function openIndexedDB() {
           actionsStore.createIndex('timestamp', 'timestamp', { unique: false });
         }
       }
+      
+      if (oldVersion < 3) {
+        // Version 3 schema additions for improved offline functionality
+        console.log('Service Worker: Upgrading to schema version 3');
+        
+        if (!db.objectStoreNames.contains('offlineStatus')) {
+          db.createObjectStore('offlineStatus', { keyPath: 'key' });
+        }
+        
+        if (!db.objectStoreNames.contains('offlineRequests')) {
+          const requestsStore = db.createObjectStore('offlineRequests', { 
+            keyPath: 'id',
+            autoIncrement: true 
+          });
+          requestsStore.createIndex('url', 'url', { unique: false });
+          requestsStore.createIndex('timestamp', 'timestamp', { unique: false });
+          requestsStore.createIndex('processed', 'processed', { unique: false });
+        }
+        
+        if (!db.objectStoreNames.contains('syncStatus')) {
+          db.createObjectStore('syncStatus', { keyPath: 'type' });
+        }
+      }
     };
+  }).catch(error => {
+    console.error('Service Worker: Error opening IndexedDB:', error);
+    reject(error);
   });
 }
 
